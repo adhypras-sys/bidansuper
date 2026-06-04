@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Bidan Super App - Modern Glassmorphism Edition</title>
+    <!-- Dynamic Manifest -->
+    <link id="manifest-link" rel="manifest" href="">
+    <meta name="theme-color" content="#F43F5E">
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons (Modern & Consistent Iconography) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* === MODERN DESIGN TOKENS & GLASSMORPHISM === */
+        :root {
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            
+            /* Light Mode Palette */
+            --primary: #F43F5E; /* Rose 500 */
+            --primary-hover: #E11D48;
+            --primary-light: rgba(244, 63, 94, 0.15);
+            
+            /* Glassmorphism Light */
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            --glass-card: rgba(255, 255, 255, 0.8);
+            
+            --bg-app: #F8FAFC;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --input-bg: rgba(255, 255, 255, 0.9);
+            
+            /* Status Colors */
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --success: #10B981;
+            
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); /* Faster transitions */
+
+            /* Blob Background Gradient Light */
+            --bg-blob-1: #FFE4E6; /* Light Rose */
+            --bg-blob-2: #E0E7FF; /* Light Indigo */
+            --bg-blob-3: #FEF3C7; /* Light Amber */
+        }
+
+        /* === DARK MODE TOKENS (Fixed Primary Color) === */
+        [data-theme="dark"] {
+            --primary: #F43F5E; /* Rose 500 - Dipertahankan dari mode terang */
+            --primary-hover: #E11D48;
+            --primary-light: rgba(244, 63, 94, 0.15);
+            
+            /* Glassmorphism Dark */
+            --glass-bg: rgba(15, 23, 42, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --glass-card: rgba(30, 41, 59, 0.7);
+            
+            --bg-app: #020617; /* Slate 950 */
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --input-bg: rgba(15, 23, 42, 0.8);
+            
+            /* Blob Background Gradient Dark */
+            --bg-blob-1: #4C1D95; /* Deep Violet */
+            --bg-blob-2: #831843; /* Deep Pink */
+            --bg-blob-3: #0F766E; /* Deep Teal */
+        }
+
+        /* === GLOBAL RESET === */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        html, body {
+            width: 100%; min-height: 100vh;
+            overflow-x: hidden; overflow-y: auto;
+            background-color: var(--bg-app); 
+            color: var(--text-main); 
+            font-family: var(--font-main); 
+            line-height: 1.6; font-size: 16px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            position: relative;
+        }
+
+        /* === ANIMATED MESH/BLOB BACKGROUND === */
+        .bg-mesh {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden;
+            background: var(--bg-app); transition: background 0.2s ease;
+        }
+        .blob { position: absolute; filter: blur(80px); border-radius: 50%; animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.6; transition: background 0.2s ease; }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--bg-blob-1); animation-delay: 0s; }
+        .blob-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: var(--bg-blob-2); animation-delay: -5s; }
+        .blob-3 { top: 30%; left: 40%; width: 40vw; height: 40vw; background: var(--bg-blob-3); animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(10%, 20%) scale(1.1); }
+            100% { transform: translate(-10%, 10%) scale(0.9); }
+        }
+
+        h1, h2, h3, h4 { font-weight: 700; color: var(--text-main); letter-spacing: -0.03em; transition: color 0.2s ease; }
+        p { color: var(--text-muted); transition: color 0.2s ease; }
+
+        /* === LAYOUT ARCHITECTURE === */
+        .app-container { display: flex; flex-direction: column; min-height: 100vh; width: 100%; position: relative; z-index: 1; }
+
+        /* HEADER GLASSMORPHISM */
+        .app-header {
+            background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            padding: 16px 20px; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; align-items: center; width: 100%;
+            transition: var(--transition);
+        }
+
+        .brand { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .brand i { color: var(--primary); font-size: 1.6rem; }
+
+        .theme-btn {
+            background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); border-radius: 50%;
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+            transition: var(--transition); font-size: 1.2rem; box-shadow: var(--glass-shadow);
+        }
+        .theme-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: rotate(15deg); }
+
+        /* NAVIGATION SCROLLER */
+        .nav-scroller {
+            background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 16px 20px; display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--glass-border); width: 100%;
+        }
+        .nav-scroller::-webkit-scrollbar { display: none; }
+        
+        .nav-item {
+            flex: 0 0 auto; display: flex; align-items: center; gap: 10px; padding: 12px 24px; 
+            background: var(--glass-card); border-radius: 100px; color: var(--text-muted); font-weight: 600; font-size: 0.95rem; 
+            cursor: pointer; transition: var(--transition); border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+        .nav-item i { font-size: 1.3rem; }
+        .nav-item:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); color: var(--primary); }
+        .nav-item.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 25px var(--primary-light); }
+
+        /* MAIN CONTENT */
+        .main-content { padding: 32px 20px 120px 20px; flex: 1; max-width: 1400px; margin: 0 auto; width: 100%; }
+        .split-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start; width: 100%; }
+
+        /* GLASS CARD */
+        .card { 
+            background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border); 
+            animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; width: 100%; position: relative; overflow: hidden;
+        }
+        
+        /* Ornamental glow inside card */
+        .card::before {
+            content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px;
+            background: var(--primary-light); filter: blur(50px); border-radius: 50%; z-index: -1;
+        }
+
+        .card-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
+        .card-header .icon-box { 
+            width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary-light), transparent); 
+            border: 1px solid var(--primary-light); border-radius: 18px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.8rem; color: var(--primary);
+        }
+        .card-header h2 { font-size: 1.6rem; margin: 0; line-height: 1.2; letter-spacing: -0.04em; }
+
+        /* FLOATING INPUTS MODERN */
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 24px; width: 100%; }
+        .input-wrapper { display: flex; flex-direction: column; gap: 8px; width: 100%; animation: fadeZoomIn 0.25s ease forwards; opacity: 0; transform: scale(0.98); }
+        
+        /* Staggered animation delays for inputs (faster) */
+        .input-wrapper:nth-child(1) { animation-delay: 0.05s; }
+        .input-wrapper:nth-child(2) { animation-delay: 0.1s; }
+        .input-wrapper:nth-child(3) { animation-delay: 0.15s; }
+        .input-wrapper:nth-child(4) { animation-delay: 0.2s; }
+        .input-wrapper:nth-child(5) { animation-delay: 0.25s; }
+        .input-wrapper:nth-child(6) { animation-delay: 0.3s; }
+        .input-wrapper:nth-child(7) { animation-delay: 0.35s; }
+
+        .floating-input { position: relative; background: var(--input-bg); border-radius: 16px; border: 1px solid var(--glass-border); transition: var(--transition); width: 100%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .floating-input:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light), inset 0 2px 4px rgba(0,0,0,0.02); background: var(--glass-card); }
+        
+        .floating-input input, .floating-input select { 
+            width: 100%; padding: 28px 48px 12px 16px; /* 48px right padding for icon */
+            background: transparent; border: none; outline: none; 
+            font-size: 1.05rem; color: var(--text-main); font-family: var(--font-main); font-weight: 600; appearance: none; border-radius: 16px; 
+        }
+        .floating-input label { position: absolute; left: 16px; top: 20px; font-size: 1rem; color: var(--text-muted); transition: var(--transition); pointer-events: none; font-weight: 500; }
+        
+        /* Stylized input icon */
+        .input-icon {
+            position: absolute; right: 16px; top: 22px; font-size: 1.4rem; color: var(--text-muted); pointer-events: none; transition: var(--transition);
+        }
+        .floating-input:focus-within .input-icon { color: var(--primary); transform: scale(1.1); }
+
+        .floating-input input:focus ~ label, .floating-input input:not(:placeholder-shown) ~ label, 
+        .floating-input select:focus ~ label, .floating-input select:valid ~ label,
+        .floating-input input[type="date"] ~ label, .floating-input input[type="time"] ~ label { 
+            top: 8px; font-size: 0.75rem; color: var(--primary); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+        }
+
+        /* HELP PANEL */
+        .help-area { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px; width: 100%; }
+        .help-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; flex: 1; }
+        .info-btn { 
+            background: var(--glass-bg); color: var(--text-main); border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; border: 1px solid var(--glass-border); transition: var(--transition); cursor: pointer;
+        }
+        .info-btn:hover, .info-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px var(--primary-light); transform: scale(1.1); }
+        
+        .info-panel-wrapper { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease; opacity: 0; width: 100%; overflow: hidden; }
+        .info-panel-wrapper.show { grid-template-rows: 1fr; opacity: 1; margin-top: 8px; }
+        .info-panel-inner { min-height: 0; }
+        .info-content { 
+            background: linear-gradient(135deg, var(--primary-light), transparent); color: var(--text-main); border-radius: 16px; padding: 16px; font-size: 0.9rem; line-height: 1.6; border: 1px solid var(--primary-light); display: flex; gap: 12px;
+        }
+        .info-content i { color: var(--primary); font-size: 1.4rem; flex-shrink: 0; }
+
+        /* BUTTONS */
+        .btn { 
+            width: 100%; padding: 18px 24px; background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-main); box-shadow: 0 4px 15px var(--primary-light); position: relative; overflow: hidden;
+        }
+        .btn::after { content:''; position: absolute; top:0; left:-100%; width:50%; height:100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); transition: 0.3s; }
+        .btn:hover::after { left: 150%; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px var(--primary-light); }
+        .btn-outline { background: var(--glass-bg); border: 2px solid var(--primary); color: var(--primary); box-shadow: none; }
+        .btn-outline:hover { background: var(--primary); color: white; box-shadow: 0 8px 25px var(--primary-light); }
+
+        /* METRICS / CLINICAL RESULTS */
+        .metric-group { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+        .metric-card { 
+            padding: 24px; border-radius: 20px; background: var(--glass-bg); border: 1px solid var(--glass-border); 
+            display: flex; flex-direction: column; gap: 8px; transition: var(--transition); width: 100%; position: relative; overflow: hidden;
+            box-shadow: var(--glass-shadow); animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0;
+        }
+        /* Color coding line */
+        .metric-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--primary); transition: var(--transition); }
+        .metric-card.danger::before { background: var(--danger); }
+        .metric-card.warning::before { background: var(--warning); }
+        .metric-card.success::before { background: var(--success); }
+        
+        .metric-card:hover { transform: translateX(5px); }
+        .metric-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .metric-label { font-size: 0.85rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .metric-value { font-size: 1.3rem; font-weight: 800; color: var(--text-main); line-height: 1.4; display: flex; align-items: center; gap: 8px; }
+
+        /* PSYCH QUIZ MODERN */
+        .quiz-question { display: none; animation: fadeInScale 0.2s ease; width: 100%; }
+        .quiz-question.active { display: block; }
+        .quiz-question h3 { font-size: 1.2rem; margin-bottom: 24px; line-height: 1.5; color: var(--text-main); }
+        
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .quiz-option { 
+            padding: 18px 24px; background: var(--input-bg); border: 2px solid var(--glass-border); border-radius: 16px; 
+            cursor: pointer; font-weight: 600; color: var(--text-main); transition: var(--transition); 
+            display: flex; align-items: center; gap: 12px; width: 100%;
+        }
+        .quiz-option i { font-size: 1.4rem; color: var(--text-muted); transition: var(--transition); }
+        .quiz-option:hover { border-color: var(--primary-light); transform: translateX(4px); }
+        .quiz-option.selected { background: var(--primary-light); border-color: var(--primary); color: var(--primary); box-shadow: 0 4px 15px var(--primary-light); }
+        .quiz-option.selected i { color: var(--primary); }
+        .quiz-option input { display: none; }
+
+        .progress-container { width: 100%; height: 8px; background: var(--glass-border); border-radius: 10px; margin-bottom: 32px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #FCA5A5); width: 0%; transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
+
+        /* TOAST */
+        .toast { 
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); 
+            background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); color: white; padding: 16px 32px; border-radius: 100px; 
+            font-size: 1rem; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.2); opacity: 0; transition: var(--transition); 
+            z-index: 1000; width: max-content; max-width: 90vw; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        [data-theme="dark"] .toast { background: rgba(255, 255, 255, 0.9); color: #0F172A; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .hidden { display: none !important; }
+
+        /* ANIMATIONS */
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeZoomIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+        
+        /* === DESKTOP & LARGE SCREENS SYMMETRY FIXES === */
+        @media (min-width: 1024px) {
+            .app-container { flex-direction: row; align-items: flex-start; max-width: 1600px; margin: 0 auto; padding: 40px 32px; gap: 40px; }
+            .app-header { display: none; }
+            
+            .sidebar { 
+                width: 320px; background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-radius: var(--radius-xl); padding: 40px 24px; box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border);
+                position: sticky; top: 40px; max-height: calc(100vh - 80px); overflow-y: auto; scrollbar-width: none; flex-shrink: 0; animation: slideInRight 0.3s ease forwards;
+            }
+            .sidebar::-webkit-scrollbar { display: none; }
+            .sidebar-brand { font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+            .sidebar-brand i { color: var(--primary); font-size: 2.2rem; }
+            .sidebar-desc { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.6; }
+            
+            .nav-scroller { flex-direction: column; padding: 0; background: transparent; border: none; overflow: visible; width: 100%; backdrop-filter: none; }
+            .nav-item { padding: 16px 24px; border-radius: 16px; margin-bottom: 8px; font-size: 1.05rem; }
+            
+            .main-content { padding: 0; }
+            .split-grid { grid-template-columns: 1fr 1fr; gap: 40px; align-items: stretch; }
+            .form-grid { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
+            .form-grid .full-width { grid-column: span 2; }
+            
+            .card { padding: 40px; display: flex; flex-direction: column; }
+            #physical-form { display: flex; flex-direction: column; flex: 1; }
+            #physical-form .btn { margin-top: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Animated Mesh Background -->
+    <div class="bg-mesh">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Mobile Header -->
+    <header class="app-header">
+        <div class="brand"><i class="ph-fill ph-heartbeat"></i> Bidan Super App</div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="theme-toggle-mobile" class="theme-btn" aria-label="Toggle Theme"><i class="ph-bold ph-moon"></i></button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        
+        <aside class="sidebar hidden-mobile" style="display:none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div class="sidebar-brand"><i class="ph-fill ph-heartbeat"></i> Bidan Super App</div>
+                <button id="theme-toggle-desktop" class="theme-btn" aria-label="Toggle Theme"><i class="ph-bold ph-moon"></i></button>
+            </div>
+            <div class="sidebar-desc">Platform skrining klinis obstetri & psikometri mandiri. Dirancang sesuai pedoman ACOG & WHO.</div>
+            <nav class="nav-scroller" id="nav-container-desktop"></nav>
+        </aside>
+
+        <!-- Mobile Nav Scroller -->
+        <nav class="nav-scroller" id="nav-container-mobile"></nav>
+
+        <main class="main-content">
+            
+            <div id="welcome-screen" class="card" style="text-align: center; padding: 80px 24px; justify-content: center; align-items: center;">
+                <div style="font-size: 5rem; margin-bottom: 24px; color: var(--primary); animation: float 6s infinite ease-in-out;"><i class="ph-duotone ph-stethoscope"></i></div>
+                <h2 style="font-size: 2.5rem; margin-bottom: 16px;">Clinical Suite</h2>
+                <p style="max-width: 500px; margin: 0 auto; font-size: 1.15rem; line-height: 1.7;">
+                    Sistem pemantauan kesehatan reproduksi komprehensif. Dilengkapi algoritma klinis ACOG & WHO terenkripsi lokal (Offline).
+                </p>
+            </div>
+
+            <div id="stage-content" class="split-grid hidden">
+                
+                <!-- KIRI: FORM KLINIS -->
+                <section class="card" id="physical-section">
+                    <div class="card-header">
+                        <div class="icon-box" id="stage-icon"></div>
+                        <div>
+                            <h2 id="stage-title">Judul Fase</h2>
+                            <p style="font-size: 0.95rem; margin-top:4px;">Analisis Fisiologis & Input Klinis</p>
+                        </div>
+                    </div>
+                    
+                    <form id="physical-form">
+                        <div class="form-grid" id="form-inputs">
+                            <!-- Inputs dinamis -->
+                        </div>
+                        <button type="submit" class="btn" style="margin-top: 40px;">
+                            <i class="ph-bold ph-activity"></i> Proses Analisis Klinis
+                        </button>
+                    </form>
+                </section>
+
+                <!-- KANAN: HASIL KLINIS & PSIKOLOGI -->
+                <div style="display: flex; flex-direction: column; gap: 32px; width: 100%;">
+                    
+                    <section class="card hidden" id="results-container">
+                        <h3 style="font-size: 1.4rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                            <i class="ph-duotone ph-clipboard-text" style="color: var(--primary);"></i> Diagnosis Sistem
+                        </h3>
+                        <div class="metric-group" id="metrics-output">
+                            <!-- Hasil dinamis -->
+                        </div>
+                    </section>
+
+                    <section class="card" id="psych-section">
+                        <div style="margin-bottom: 32px;">
+                            <h3 style="font-size: 1.4rem; display: flex; align-items: center; gap: 10px;">
+                                <i class="ph-duotone ph-brain" style="color: var(--primary);"></i> Asesmen Psikologis
+                            </h3>
+                            <p id="psych-desc" style="font-size: 1rem; margin-top: 8px;"></p>
+                        </div>
+                        
+                        <div id="quiz-container">
+                            <div class="progress-container"><div class="progress-bar" id="quiz-progress"></div></div>
+                            <form id="quiz-form" style="display: flex; flex-direction: column; flex: 1;">
+                                <div id="quiz-questions"></div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: auto; padding-top: 40px;">
+                                    <button type="button" id="btn-prev-quiz" class="btn btn-outline hidden"><i class="ph-bold ph-arrow-left"></i> Kembali</button>
+                                    <button type="button" id="btn-next-quiz" class="btn" style="grid-column: span 2;">Lanjut <i class="ph-bold ph-arrow-right"></i></button>
+                                    <button type="submit" id="btn-submit-quiz" class="btn hidden" style="grid-column: span 2;"><i class="ph-bold ph-check-circle"></i> Analisis Mental</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="psych-result-container" class="hidden">
+                            <div class="metric-card" id="psych-box">
+                                <div class="metric-header">
+                                    <div class="metric-label" id="psych-result-title">Skor Mental</div>
+                                </div>
+                                <div class="metric-value" id="psych-score" style="font-size: 2rem; margin-top: 8px; color: var(--primary);">0</div>
+                                <div id="psych-interpretation" style="margin-top: 16px; font-weight: 500; font-size: 1.1rem; line-height: 1.6;"></div>
+                            </div>
+                            <button type="button" id="btn-retake-quiz" class="btn btn-outline" style="margin-top: 24px;"><i class="ph-bold ph-arrow-counter-clockwise"></i> Ulangi Asesmen</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="toast" class="toast"><i class="ph-fill ph-info"></i> <span id="toast-msg">Sistem Terkini!</span></div>
+
+    <script>
+        /**
+         * APPLICATION STATE & DOM ELEMENTS
+         */
+        const state = { currentStage: null, answersPsych: [], currentQuizIndex: 0 };
+        
+        const DOM = {
+            welcomeScreen: document.getElementById('welcome-screen'),
+            stageContent: document.getElementById('stage-content'),
+            stageTitle: document.getElementById('stage-title'),
+            stageIcon: document.getElementById('stage-icon'),
+            formInputs: document.getElementById('form-inputs'),
+            physicalForm: document.getElementById('physical-form'),
+            resultsContainer: document.getElementById('results-container'),
+            metricsOutput: document.getElementById('metrics-output'),
+            psychDesc: document.getElementById('psych-desc'),
+            quizQuestions: document.getElementById('quiz-questions'),
+            quizForm: document.getElementById('quiz-form'),
+            btnPrev: document.getElementById('btn-prev-quiz'),
+            btnNext: document.getElementById('btn-next-quiz'),
+            btnSubmit: document.getElementById('btn-submit-quiz'),
+            quizProgress: document.getElementById('quiz-progress'),
+            psychResult: document.getElementById('psych-result-container'),
+            psychBox: document.getElementById('psych-box'),
+            psychScore: document.getElementById('psych-score'),
+            psychInterpretation: document.getElementById('psych-interpretation'),
+            btnRetake: document.getElementById('btn-retake-quiz'),
+            quizContainer: document.getElementById('quiz-container'),
+            toast: document.getElementById('toast'),
+            toastMsg: document.getElementById('toast-msg')
+        };
+        
+        const navContainerMobile = document.getElementById('nav-container-mobile');
+        const navContainerDesktop = document.getElementById('nav-container-desktop');
+
+        /**
+         * THEME MANAGEMENT LOGIC
+         */
+        function updateThemeIcons() {
+            try {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                const htmlIcon = isDark ? '<i class="ph-bold ph-sun"></i>' : '<i class="ph-bold ph-moon"></i>';
+                const btnMobile = document.getElementById('theme-toggle-mobile');
+                const btnDesktop = document.getElementById('theme-toggle-desktop');
+                if(btnMobile) btnMobile.innerHTML = htmlIcon;
+                if(btnDesktop) btnDesktop.innerHTML = htmlIcon;
+            } catch(e) { console.error('Error updateThemeIcons:', e); }
+        }
+
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('bidan_theme', newTheme);
+                updateThemeIcons();
+            } catch (e) { console.error('Error toggleTheme:', e); }
+        }
+
+        try {
+            document.getElementById('theme-toggle-mobile').addEventListener('click', toggleTheme);
+            document.getElementById('theme-toggle-desktop').addEventListener('click', toggleTheme);
+            updateThemeIcons();
+
+            if(window.innerWidth >= 1024) {
+                document.querySelectorAll('.hidden-mobile').forEach(el => el.style.display = 'block');
+                if(navContainerMobile) navContainerMobile.style.display = 'none';
+                document.getElementById('theme-toggle-desktop').style.display = 'flex';
+            } else {
+                if(navContainerDesktop) navContainerDesktop.style.display = 'none';
+            }
+        } catch(e) { console.error('Error binding theme listeners:', e); }
+
+        function showToast(msg) { 
+            try {
+                if(DOM.toastMsg) DOM.toastMsg.innerText = msg;
+                if(DOM.toast) {
+                    DOM.toast.classList.add('show'); 
+                    setTimeout(() => DOM.toast.classList.remove('show'), 3000); 
+                }
+            } catch(e) { console.error('Toast error:', e); }
+        }
+
+        function parseLocalDate(dateString) {
+            try {
+                if(!dateString) return new Date(NaN);
+                const [year, month, day] = dateString.split('-');
+                return new Date(year, month - 1, day);
+            } catch(e) { 
+                console.error('Error parseLocalDate:', e);
+                return new Date(NaN); 
+            }
+        }
+
+        window.toggleInfoPanel = function(id) {
+            try {
+                const wrapper = document.getElementById(`info-wrapper-${id}`);
+                const btn = document.getElementById(`btn-info-${id}`);
+                if(!wrapper || !btn) return;
+                const isShowing = wrapper.classList.contains('show');
+                document.querySelectorAll('.info-panel-wrapper.show').forEach(p => p.classList.remove('show'));
+                document.querySelectorAll('.info-btn.active').forEach(b => b.classList.remove('active'));
+                if(!isShowing) { wrapper.classList.add('show'); btn.classList.add('active'); }
+            } catch(e) { console.error('Error toggleInfoPanel:', e); }
+        };
+
+        /**
+         * CORE DATA ARCHITECTURE & ALGORITHMS
+         */
+        const optFrequency = [
+            { text: "Tidak pernah", score: 0 }, { text: "Beberapa hari", score: 1 },
+            { text: "Lebih dari separuh waktu", score: 2 }, { text: "Hampir setiap hari", score: 3 }
+        ];
+        const optAgreement = [
+            { text: "Sangat Tidak Setuju", score: 0 }, { text: "Tidak Setuju", score: 1 },
+            { text: "Setuju", score: 2 }, { text: "Sangat Setuju", score: 3 }
+        ];
+        const optDistress = [
+            { text: "Ya, sering kali", score: 3 }, { text: "Ya, kadang-kadang", score: 2 },
+            { text: "Jarang", score: 1 }, { text: "Tidak sama sekali", score: 0 }
+        ];
+
+        const stagesConfig = [
+            {
+                // MENGGUNAKAN IKON ph-heart KARENA LEBIH AMAN DAN TERSEDIA DI SEMUA VERSI
+                id: 'pranikah', title: 'Pra Nikah', icon: '<i class="ph-duotone ph-heart"></i>',
+                inputs: [
+                    { id: 'bb', label: 'Berat Badan (kg)', type: 'number', step: '0.1', icon: 'ph-scales', desc: 'Massa tubuh saat ini.', tooltip: 'Data berat badan digunakan untuk mengkalkulasi Indeks Massa Tubuh (BMI).' },
+                    { id: 'tb', label: 'Tinggi Badan (cm)', type: 'number', icon: 'ph-ruler', desc: 'Tinggi tubuh saat ini.', tooltip: 'Digunakan sebagai pembagi dalam rumus BMI. Proporsi ideal mencegah komplikasi.' },
+                    // MENGGANTI ph-person MENJADI ph-user
+                    { id: 'lila', label: 'Lingkar Lengan (cm)', type: 'number', step: '0.1', icon: 'ph-user', desc: 'Diukur di pertengahan lengan kiri.', tooltip: 'Standar WHO > 23.5 cm. Jika kurang, berisiko Kurang Energi Kronis (KEK).' },
+                    { id: 'td_sistolik', label: 'Tensi Sistolik (mmHg)', type: 'number', icon: 'ph-activity', desc: 'Angka atas tekanan darah.', tooltip: 'Penting untuk mendeteksi risiko hipertensi dini sebelum merencanakan kehamilan.' },
+                    { id: 'td_diastolik', label: 'Tensi Diastolik (mmHg)', type: 'number', icon: 'ph-activity', desc: 'Angka bawah tekanan darah.', tooltip: 'Tekanan darah normal yang ideal adalah di bawah 120/80 mmHg.' },
+                    { id: 'jam_tidur', label: 'Tidur Malam (Jam)', type: 'number', step: '0.5', icon: 'ph-moon-stars', desc: 'Rata-rata tidur.', tooltip: 'Kualitas tidur (7-9 jam) meregulasi hormon FSH dan LH untuk kesuburan.' }
+                ],
+                calculateFnc: (data) => {
+                    try {
+                        let results = [];
+                        const bb = parseFloat(data.bb); const tbM = parseFloat(data.tb) / 100;
+                        const lila = parseFloat(data.lila); const tidur = parseFloat(data.jam_tidur);
+                        const sis = parseFloat(data.td_sistolik); const dia = parseFloat(data.td_diastolik);
+                        
+                        if(!isNaN(bb) && !isNaN(tbM) && tbM > 0) {
+                            const bmi = (bb / (tbM * tbM)).toFixed(1);
+                            let bmiStatus = bmi < 18.5 ? "Kurus" : bmi < 25 ? "Normal" : bmi < 30 ? "Overweight" : "Obese";
+                            results.push({ id: 'res_bmi', title: 'Body Mass Index', value: `<i class="ph-duotone ph-scales"></i> ${bmi} - ${bmiStatus}`, type: bmi < 18.5 || bmi >= 30 ? "warning" : "success", desc: 'Rasio berat dan tinggi badan.', tooltip: 'Wanita dengan BMI Normal (18.5-24.9) memiliki keseimbangan hormon estrogen terbaik.' });
+                        }
+                        if(!isNaN(lila)) {
+                            results.push({ id: 'res_lila', title: 'Skrining KEK (LILA)', value: lila < 23.5 ? `<i class="ph-duotone ph-warning"></i> Risiko KEK` : `<i class="ph-duotone ph-check-circle"></i> Normal`, type: lila < 23.5 ? "danger" : "success", desc: 'Status cadangan gizi.', tooltip: 'Intervensi gizi wajib dilakukan sebelum hamil jika LILA kurang dari 23.5 cm.' });
+                        }
+                        if(!isNaN(sis) && !isNaN(dia)) {
+                            let statusTd = (sis < 120 && dia < 80) ? "Normal" : ((sis >= 140 || dia >= 90) ? "Hipertensi" : "Pre-Hipertensi");
+                            let typeTd = statusTd === "Normal" ? "success" : (statusTd === "Hipertensi" ? "danger" : "warning");
+                            results.push({ id: 'res_td', title: 'Tekanan Darah', value: `<i class="ph-duotone ph-activity"></i> ${sis}/${dia} - ${statusTd}`, type: typeTd, desc: 'Profil kardiovaskular.', tooltip: 'Hipertensi sebelum hamil sangat meningkatkan risiko Preeklamsia saat hamil nanti.' });
+                        }
+                        if(!isNaN(tidur)) {
+                            results.push({ id: 'res_tidur', title: 'Kualitas Tidur', value: tidur >= 7 && tidur <= 9 ? `<i class="ph-duotone ph-moon-stars"></i> Optimal` : `<i class="ph-duotone ph-warning"></i> Berisiko`, type: tidur >= 7 && tidur <= 9 ? "success" : "warning", desc: 'Dampak durasi tidur.', tooltip: 'Tidur diluar 7-9 jam memicu hormon stres (Kortisol) yang menghambat ovulasi.' });
+                        }
+                        return results;
+                    } catch (e) {
+                        console.error('Error pranikah calculateFnc:', e);
+                        return [];
+                    }
+                },
+                psych: {
+                    desc: "Asesmen kecemasan dan kesiapan pranikah (Tidur, cemas, dan komunikasi).",
+                    questions: [
+                        "Seberapa sering Anda merasa gugup, cemas, atau tegang tentang masa depan?",
+                        "Seberapa sering Anda sulit mengendalikan kekhawatiran berlebih (overthinking)?",
+                        "Apakah Anda merasa khawatir tentang kecocokan atau komunikasi dengan pasangan?",
+                        "Seberapa sering Anda merasa stres mengenai masalah finansial untuk pernikahan?",
+                        "Seberapa sering pikiran cemas mengganggu jam tidur Anda di malam hari?"
+                    ], options: optFrequency,
+                    evaluate: (score) => {
+                        try {
+                            if(score <= 4) return { text: "Kondisi mental dan kesiapan finansial/pasangan sangat baik.", type:"success" };
+                            if(score <= 9) return { text: "Tingkat stres ringan-sedang. Bicarakan kekhawatiran Anda secara terbuka dengan pasangan.", type:"warning" };
+                            return { text: "Distres pra-nikah tinggi. Berdampak negatif pada kesehatan fisik. Pertimbangkan konseling pranikah.", type:"danger" };
+                        } catch(e) {
+                            console.error('Error pranikah psych evaluate:', e);
+                            return {text: "Error", type:""};
+                        }
+                    }
+                }
+            },
+            {
+                id: 'persiapan_hamil', title: 'Program Hamil', icon: '<i class="ph-duotone ph-plant"></i>',
+                inputs: [
+                    { id: 'hpht', label: 'Hari Pertama Haid (HPHT)', type: 'date', fullWidth: true, icon: 'ph-calendar-blank', desc: 'Haid terakhir.', tooltip: 'Pastikan yang dicatat adalah HARI PERTAMA keluarnya darah haid.' },
+                    { id: 'siklus', label: 'Siklus Haid (hari)', type: 'number', default: '28', icon: 'ph-arrows-clockwise', desc: 'Jarak antar haid.', tooltip: 'Rata-rata populasi adalah 28 hari. Siklus sangat tidak teratur bisa menandakan PCOS.' },
+                    { id: 'suhu_basal', label: 'Suhu Basal Pagi (°C)', type: 'number', step: '0.1', icon: 'ph-thermometer', desc: 'Suhu bangun tidur.', tooltip: 'Kenaikan suhu basal sekitar 0.3-0.5°C menandakan sel telur SUDAH dilepaskan.' },
+                    { id: 'lendir_serviks', label: 'Lendir Serviks', type: 'select', options: ['Kering / Tidak ada', 'Lengket / Putih Susu', 'Bening, Licin & Melar'], fullWidth: true, icon: 'ph-drop', desc: 'Metode Billings.', tooltip: 'Lendir melar (putih telur mentah) membentuk jalan tol bagi sperma.' }
+                ],
+                calculateFnc: (data) => {
+                    try {
+                        let results = [];
+                        const hphtDate = parseLocalDate(data.hpht); const siklus = parseInt(data.siklus);
+                        if(!isNaN(hphtDate.getTime()) && !isNaN(siklus)) {
+                            const ovulasiDate = new Date(hphtDate); ovulasiDate.setDate(hphtDate.getDate() + (siklus - 14));
+                            const awalSubur = new Date(ovulasiDate); awalSubur.setDate(ovulasiDate.getDate() - 4);
+                            const akhirSubur = new Date(ovulasiDate); akhirSubur.setDate(ovulasiDate.getDate() + 1);
+                            const format = (d) => d.toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+                            results.push({ id: 'res_subur', title: 'Masa Subur', value: `<i class="ph-duotone ph-calendar-heart"></i> ${format(awalSubur)} - ${format(akhirSubur)}`, type: 'success', desc: 'Jendela kehamilan tertinggi.', tooltip: 'Sperma bisa hidup 3-5 hari, sedangkan sel telur hanya 12-24 jam.' });
+                        }
+                        if (data.lendir_serviks === 'Bening, Licin & Melar') {
+                            results.push({ id:'res_lendir1', title: 'Status Billings', value: `<i class="ph-duotone ph-drop"></i> PUNCAK KESUBURAN!`, type: "success", desc: 'Waktu terbaik konsepsi.', tooltip: 'Lendir ini dipicu hormon Estrogen sebelum ovulasi pecah.' });
+                        } else if (data.lendir_serviks === 'Lengket / Putih Susu') {
+                            results.push({ id:'res_lendir2', title: 'Status Billings', value: `<i class="ph-duotone ph-x-circle"></i> Fase tidak subur.`, type: "warning", desc: 'Lendir kental.', tooltip: 'Lendir kental dipicu hormon Progesteron untuk mencegah benda asing masuk.' });
+                        }
+                        return results;
+                    } catch (e) {
+                        console.error('Error persiapan_hamil calculateFnc:', e);
+                        return [];
+                    }
+                },
+                psych: {
+                    desc: "Asesmen Stres Konsepsi (Dampak emosional saat program hamil berjalan).",
+                    questions: [
+                        "Apakah Anda merasa tertekan dengan pertanyaan lingkungan 'Kapan Hamil?'",
+                        "Apakah Anda sering menangis atau sangat kecewa saat haid datang kembali?",
+                        "Apakah hubungan intim suami istri mulai terasa seperti kewajiban/tugas mekanis?",
+                        "Apakah Anda merasa iri atau sedih saat melihat postingan kehamilan di media sosial?",
+                        "Apakah Anda merasa berjuang sendirian dan kurang dukungan emosional dari pasangan?"
+                    ], options: optAgreement,
+                    evaluate: (score) => {
+                        try {
+                            if(score <= 4) return {text: "Mental rileks. Sangat mendukung hormon endokrin untuk terjadinya ovulasi.", type: "success"};
+                            if(score <= 9) return {text: "Stres promil ringan. Cobalah membatasi media sosial dan ubah rutinitas bersama pasangan.", type: "warning"};
+                            return {text: "Stres Konsepsi Tinggi. Hormon stres (Kortisol) dapat menunda pembuahan. Sangat disarankan relaksasi.", type: "danger"};
+                        } catch(e) {
+                            console.error('Error persiapan_hamil psych evaluate:', e);
+                            return {text: "Error", type:""};
+                        }
+                    }
+                }
+            },
+            {
+                id: 'hamil', title: 'Kehamilan', icon: '<i class="ph-duotone ph-baby"></i>',
+                inputs: [
+                    { id: 'hpht_hamil', label: 'HPHT', type: 'date', fullWidth:true, icon: 'ph-calendar-blank', desc: 'Tanggal haid terakhir.', tooltip: 'Digunakan untuk kalkulasi Rumus Naegele.' },
+                    { id: 'tfu', label: 'Tinggi Fundus (cm)', type: 'number', icon: 'ph-ruler', desc: 'Puncak rahim.', tooltip: 'Diukur untuk mengetahui pertumbuhan anatomis janin.' },
+                    { id: 'kepala_masuk', label: 'Kepala masuk panggul?', type: 'select', options: ['Belum Masuk', 'Sudah Masuk'], icon: 'ph-baby', desc: 'Posisi janin.', tooltip: 'Mengurangi perhitungan taksiran berat di dinding perut luar.' },
+                    { id: 'td_sis_hamil', label: 'Sistolik Ibu', type: 'number', icon: 'ph-activity', desc: 'Tensi darah ibu.', tooltip: 'Pemantauan tekanan darah di trimester 2/3 wajib untuk skrining Preeklamsia.' },
+                    { id: 'td_dia_hamil', label: 'Diastolik Ibu', type: 'number', icon: 'ph-activity', desc: 'Tensi darah ibu.', tooltip: 'Batas waspada adalah jika tensi melebihi 140/90 mmHg.' },
+                    { id: 'kick_start', label: 'Jam mulai (Gerak Janin)', type: 'time', icon: 'ph-clock', desc: 'Metode Cardiff.', tooltip: 'Hitung saat janin aktif (misal setelah ibu makan).' },
+                    { id: 'kick_end', label: 'Jam gerak ke-10', type: 'time', icon: 'ph-clock', desc: 'Waktu selesai 10x gerak.', tooltip: 'Waktu akhir kalkulasi otomatis oksigenasi janin.' }
+                ],
+                calculateFnc: (data) => {
+                    try {
+                        let results = [];
+                        const hphtDate = parseLocalDate(data.hpht_hamil);
+                        if(!isNaN(hphtDate.getTime())) {
+                            const diffDays = Math.floor(Math.abs(new Date() - hphtDate) / (1000 * 60 * 60 * 24));
+                            results.push({ id: 'res_gestasi', title: 'Usia Gestasi', value: `<i class="ph-duotone ph-hourglass-high"></i> ${Math.floor(diffDays/7)} Mgg, ${diffDays%7} Hr`, type: 'success', desc: 'Rumus absolut.', tooltip: 'Menentukan normalitas janin.' });
+                        }
+                        const tfu = parseFloat(data.tfu);
+                        if(!isNaN(tfu) && tfu > 10) {
+                            const N = data.kepala_masuk === 'Sudah Masuk' ? 11 : 12;
+                            results.push({ id: 'res_tbj', title: 'Taksiran Berat Janin', value: `<i class="ph-duotone ph-scales"></i> ${Math.max((tfu - N) * 155, 0)} gram`, type: 'success', desc: 'Prediksi klinis.', tooltip: 'Rumus Johnson-Toshach. Toleransi error 200-300g dari USG.' });
+                        }
+                        const sisH = parseFloat(data.td_sis_hamil); const diaH = parseFloat(data.td_dia_hamil);
+                        if(!isNaN(sisH) && !isNaN(diaH)) {
+                            if(sisH >= 140 || diaH >= 90) {
+                                results.push({ id: 'res_pe', title: 'Waspada Preeklamsia', value: `<i class="ph-duotone ph-warning-circle"></i> ${sisH}/${diaH} mmHg`, type: 'danger', desc: 'Hipertensi Gestasional!', tooltip: 'Segera cek protein urine ke laboratorium. Risiko kejang atau persalinan prematur.' });
+                            } else {
+                                results.push({ id: 'res_pe', title: 'Tensi Darah', value: `<i class="ph-duotone ph-heartbeat"></i> ${sisH}/${diaH} (Normal)`, type: 'success', desc: 'Aman.', tooltip: 'Sirkulasi darah ke plasenta berjalan lancar tanpa hambatan vasokonstriksi.' });
+                            }
+                        }
+                        if(data.kick_start && data.kick_end) {
+                            const tStart = new Date(`1970-01-01T${data.kick_start}`); const tEnd = new Date(`1970-01-01T${data.kick_end}`);
+                            if (!isNaN(tStart.getTime()) && !isNaN(tEnd.getTime())) {
+                                if (tEnd < tStart) tEnd.setDate(tEnd.getDate() + 1);
+                                const diffMins = (tEnd - tStart) / 60000;
+                                if(diffMins <= 120) {
+                                    results.push({ id:'res_kick1', title: 'Gerak Janin (Cardiff)', value: `<i class="ph-duotone ph-check-circle"></i> Normal (${diffMins} mnt)`, type: "success", desc: 'Oksigenasi baik.', tooltip: 'Janin harus gerak 10x max 2 jam.' });
+                                } else {
+                                    results.push({ id:'res_kick2', title: 'Gerak Janin (Cardiff)', value: `<i class="ph-duotone ph-warning"></i> WASPADA! >2 jam`, type: "danger", desc: 'Fetal Distress.', tooltip: 'Janin kurang oksigen, segera ke IGD.' });
+                                }
+                            }
+                        }
+                        return results;
+                    } catch (e) {
+                        console.error('Error hamil calculateFnc:', e);
+                        return [];
+                    }
+                },
+                psych: {
+                    desc: "Skrining Kesejahteraan Prenatal (Adaptasi Edinburgh Postnatal/Prenatal Depression Scale).",
+                    questions: [
+                        "Saya merasa sulit merasa bahagia meskipun memikirkan bayi yang akan lahir.",
+                        "Saya sering menyalahkan diri sendiri secara berlebihan saat hal kecil tidak sesuai rencana.",
+                        "Saya sering merasa cemas, khawatir, atau gelisah tanpa alasan yang jelas.",
+                        "Saya mengalami serangan panik (dada berdebar) saat memikirkan tanggung jawab sebagai ibu.",
+                        "Saya merasa sangat sedih, sengsara, dan sering menangis akhir-akhir ini."
+                    ], options: optDistress,
+                    evaluate: (score) => {
+                        try {
+                            if(score <= 4) return {text: "Kondisi mental stabil. Afirmasi positif terhadap kehamilan sangat baik.", type: "success"};
+                            if(score <= 9) return {text: "Kecemasan antenatal ringan-sedang. Sangat disarankan mengikuti kelas Prenatal Yoga/Hypnobirthing.", type: "warning"};
+                            return {text: "Risiko Depresi Prenatal Tinggi. Stres kronis dapat menembus plasenta. Segera jadwalkan konsultasi psikolog.", type: "danger"};
+                        } catch(e) {
+                            console.error('Error hamil psych evaluate:', e);
+                            return {text: "Error", type:""};
+                        }
+                    }
+                }
+            },
+            {
+                id: 'melahirkan', title: 'Persalinan', icon: '<i class="ph-duotone ph-first-aid-kit"></i>',
+                inputs: [
+                    { id: 'ketuban_pecah', label: 'Air Ketuban Pecah?', type: 'select', options: ['Tidak/Belum', 'Ya, Cairan Bening', 'Ya, Cairan Hijau/Keruh'], fullWidth: true, icon: 'ph-waves', desc: 'Pecah Ketuban Dini (KPD).', tooltip: 'Air ketuban hijau menandakan janin telah BAB (mekonium) di dalam rahim, mengindikasikan janin stres.' },
+                    { id: 'durasi_kontraksi', label: 'Lama 1 mulas (Detik)', type: 'number', icon: 'ph-timer', desc: 'Berapa lama perut kencang.', tooltip: 'Dihitung dari mulai kencang hingga lemas utuh.' },
+                    { id: 'interval_kontraksi', label: 'Jarak antar mulas (Menit)', type: 'number', step: '0.1', icon: 'ph-timer', desc: 'Awal kencang ke kencang berikutnya.', tooltip: 'Semakin pendek interval, semakin besar pembukaan serviks.' },
+                    { id: 'durasi_pola', label: 'Pola berlangsung (Jam)', type: 'number', step: '0.1', icon: 'ph-timer', desc: 'Konsistensi kontraksi.', tooltip: 'Kontraksi palsu biasanya akan hilang jika dibawa istirahat.' }
+                ],
+                calculateFnc: (data) => {
+                    try {
+                        let results = [];
+                        if (data.ketuban_pecah === 'Ya, Cairan Hijau/Keruh') {
+                            results.push({ id:'res_kpd_hijau', title: 'STATUS KETUBAN: DARURAT', value: `<i class="ph-duotone ph-warning"></i> Janin Stres (Mekonium)!`, type: "danger", desc: 'Abaikan aturan kontraksi.', tooltip: 'Segera ke IGD RS. Risiko janin keracunan atau asfiksia tinggi.' });
+                        } else if (data.ketuban_pecah === 'Ya, Cairan Bening') {
+                            results.push({ id:'res_kpd_bening', title: 'STATUS KETUBAN: KPD', value: `<i class="ph-duotone ph-info"></i> Ketuban Pecah.`, type: "warning", desc: 'Waktu berbatas.', tooltip: 'Risiko infeksi meningkat. Segera menuju fasilitas kesehatan meskipun kontraksi belum kuat.' });
+                        }
+
+                        const durasi = parseFloat(data.durasi_kontraksi); const interval = parseFloat(data.interval_kontraksi); const pola = parseFloat(data.durasi_pola);
+                        if(!isNaN(durasi) && !isNaN(interval) && !isNaN(pola)) {
+                            if(interval <= 3) {
+                                results.push({ id: 'res_triage2', title: 'Fase Transisi / Kala II', value: `<i class="ph-duotone ph-siren"></i> KONDISI DARURAT!`, type: "danger", desc: 'Persalinan segera terjadi.', tooltip: 'Anda di fase mengejan. Jangan menahan, segera minta pertolongan medis!' });
+                            } else if(interval <= 5 && durasi >= 45 && pola >= 1) {
+                                results.push({ id: 'res_triage1', title: 'Triage 5-1-1 (ACOG)', value: `<i class="ph-duotone ph-ambulance"></i> Fase Aktif Persalinan.`, type: "danger", desc: 'Waktu tepat ke faskes.', tooltip: 'Aturan 5-1-1: Kontraksi jarak 5 mnt, durasi 1 mnt, selama 1 jam. Pembukaan biasanya >4 cm.' });
+                            } else {
+                                results.push({ id: 'res_triage3', title: 'Analisis Fase Laten', value: `<i class="ph-duotone ph-bed"></i> Belum Kriteria Triage.`, type: "success", desc: 'Masih fase awal.', tooltip: 'Masih kontraksi awal/Braxton Hicks. Makan, minum manis, dan hemat tenaga di rumah.' });
+                            }
+                        }
+                        return results;
+                    } catch (e) {
+                        console.error('Error melahirkan calculateFnc:', e);
+                        return [];
+                    }
+                },
+                psych: {
+                    desc: "Skrining Fear of Childbirth (Tokofobia) dan Kesiapan Mental Persalinan.",
+                    questions: [
+                        "Apakah Anda merasa panik dan kehilangan kendali tubuh saat gelombang mulas datang?",
+                        "Apakah Anda merasa sangat takut tidak mampu menahan rasa sakit persalinan?",
+                        "Apakah Anda memiliki keraguan atau tidak percaya pada tenaga medis yang akan menolong?",
+                        "Apakah Anda merasa takut membayangkan kemungkinan dioperasi sesar (SC)?",
+                        "Apakah Anda merasa suami/keluarga tidak memberikan dukungan emosional yang cukup?"
+                    ], options: optAgreement,
+                    evaluate: (score) => {
+                        try {
+                            if(score <= 4) return {text: "Keberanian dan kesiapan sangat tangguh. Lanjutkan teknik napas (belly breathing).", type: "success"};
+                            if(score <= 9) return {text: "Kecemasan persalinan normal. Pendamping (suami) WAJIB memberi pijatan endorfin & kalimat afirmasi.", type: "warning"};
+                            return {text: "Terindikasi ketakutan tinggi (Tokofobia). Adrenalin yang tinggi akan menghentikan hormon pembukaan (Oksitosin). Coba teknik relaksasi mata tertutup.", type: "danger"};
+                        } catch (e) {
+                            console.error('Error melahirkan psych evaluate:', e);
+                            return {text: "Error", type:""};
+                        }
+                    }
+                }
+            },
+            {
+                id: 'menyusui', title: 'Laktasi & Nifas', icon: '<i class="ph-duotone ph-baby-carriage"></i>',
+                inputs: [
+                    { id: 'frek_bak', label: 'Pipis Bayi/Hari (x)', type: 'number', default: '6', icon: 'ph-drop', desc: 'Indikator ASI.', tooltip: 'Satu popok basah berat (3 sdm air). Ini bukti sah ASI masuk.' },
+                    { id: 'puting_lecet', label: 'Puting Lecet / Berdarah?', type: 'select', options: ['Tidak', 'Ya, Terasa Nyeri'], icon: 'ph-bandaids', desc: 'Kondisi Anatomi Ibu.', tooltip: 'Lecet adalah tanda 100% Pelekatan (Latch) bayi salah. Mulut bayi kurang terbuka lebar.' },
+                    { id: 'lam_umur', label: 'Bayi < 6 Bulan?', type: 'select', options: ['Ya', 'Tidak'], icon: 'ph-calendar', desc: 'Syarat KB LAM ke-1.', tooltip: 'Setelah 6 bulan / MPASI, efektivitas KB hormon laktasi menurun.' },
+                    { id: 'lam_asi', label: 'Menyusui Full Eksklusif?', type: 'select', options: ['Ya', 'Tidak'], icon: 'ph-check-square', desc: 'Syarat KB LAM ke-2.', tooltip: 'Tanpa tambahan sufor/air. Jeda nyusu maksimal 4 jam siang, 6 jam malam.' },
+                    { id: 'lam_haid', label: 'SUDAH haid lagi?', type: 'select', options: ['Belum Haid', 'Sudah Haid'], icon: 'ph-calendar-blank', desc: 'Syarat KB LAM ke-3.', tooltip: 'Keluarnya darah haid menandakan sistem subur telah on kembali.' }
+                ],
+                calculateFnc: (data) => {
+                    try {
+                        let results = [];
+                        const bak = parseInt(data.frek_bak);
+                        if(!isNaN(bak)) {
+                            results.push({ id: 'res_bak', title: 'Kecukupan Cairan Bayi', value: bak >= 6 ? `<i class="ph-duotone ph-check-circle"></i> Terpenuhi.` : `<i class="ph-duotone ph-warning"></i> Waspada Dehidrasi!`, type: bak >= 6 ? "success" : "danger", desc: 'Bukti objektif hidrasi.', tooltip: 'Menangis bukan indikator ASI kurang. Volume BAK (>=6x) adalah standar emas medis kecukupan cairan.' });
+                        }
+                        if(data.puting_lecet === 'Ya, Terasa Nyeri') {
+                            results.push({ id:'res_lecet', title: 'Evaluasi Pelekatan Laktasi', value: `<i class="ph-duotone ph-warning-octagon"></i> Pelekatan (Latch) Salah!`, type: "danger", desc: 'Risiko Mastitis.', tooltip: 'Menyusui TIDAK BOLEH SAKIT. Masukkan seluruh area hitam payudara (areola) bagian bawah ke mulut bayi, bukan hanya putingnya.' });
+                        } else {
+                            results.push({ id:'res_lecet', title: 'Evaluasi Pelekatan Laktasi', value: `<i class="ph-duotone ph-thumbs-up"></i> Pelekatan Nyaman`, type: "success", desc: 'Lanjutkan.', tooltip: 'Pelekatan yang benar mencegah luka dan memaksimalkan pengosongan payudara.' });
+                        }
+                        if(data.lam_umur==='Ya' && data.lam_asi==='Ya' && data.lam_haid==='Belum Haid') {
+                            results.push({ id: 'res_lam1', title: 'KB Alami (Metode LAM)', value: `<i class="ph-duotone ph-shield-check"></i> EFEKTIF (98%)`, type: "success", desc: 'Standar WHO.', tooltip: 'Hormon Prolaktin menekan ovulasi sempurna. ASI bertindak sebagai KB sekuat IUD/Pil.' });
+                        } else {
+                            results.push({ id: 'res_lam2', title: 'KB Alami (Metode LAM)', value: `<i class="ph-duotone ph-shield-warning"></i> TIDAK EFEKTIF.`, type: "danger", desc: 'Syarat gugur.', tooltip: 'Syarat WHO patah. Anda dapat ovulasi kapan saja walau belum haid. Segera pasang IUD / KB progestin.' });
+                        }
+                        return results;
+                    } catch (e) {
+                        console.error('Error menyusui calculateFnc:', e);
+                        return [];
+                    }
+                },
+                psych: {
+                    desc: "Skrining Baby Blues & Postpartum Depression (Dampak Laktasi).",
+                    questions: [
+                        "Apakah Anda merasa menjadi 'ibu yang gagal' ketika bayi Anda terus menangis?",
+                        "Apakah rasa nyeri payudara / jahitan membuat Anda trauma dan membenci proses perawatan?",
+                        "Apakah tekanan dari orang sekitar (misal: menyuruh Sufor) membuat Anda sedih/tertekan?",
+                        "Apakah Anda merasa tidak memiliki ikatan batin (kurang sayang) pada bayi Anda?",
+                        "Apakah Anda pernah memiliki pikiran tiba-tiba untuk menyakiti diri sendiri atau bayi?"
+                    ], options: optDistress,
+                    evaluate: (score) => {
+                        try {
+                            if(score <= 4) return {text: "Self-Efficacy ibu nifas tinggi. Anda hebat dan terkoneksi kuat dengan bayi!", type: "success"};
+                            if(score <= 9) return {text: "Indikasi Baby Blues. Fluktuasi hormon wajar terjadi. Minta suami mengambil alih bayi agar ibu bisa tidur 4 jam nonstop.", type: "warning"};
+                            return {text: "Tanda Postpartum Depression Berat. Ini bukan salah Anda, ini kondisi medis endokrin. WAJIB SEGERA lapor keluarga/dokter!", type: "danger"};
+                        } catch (e) {
+                            console.error('Error menyusui psych evaluate:', e);
+                            return {text: "Error", type:""};
+                        }
+                    }
+                }
+            }
+        ];
+
+        /**
+         * INITIALIZE & RENDER
+         */
+        function renderNav() {
+            try {
+                if(navContainerMobile) navContainerMobile.innerHTML = '';
+                if(navContainerDesktop) navContainerDesktop.innerHTML = '';
+                
+                stagesConfig.forEach(stage => {
+                    const html = `${stage.icon} <span>${stage.title}</span>`;
+                    
+                    if(navContainerMobile) {
+                        const btnM = document.createElement('div'); btnM.className = 'nav-item'; btnM.innerHTML = html;
+                        btnM.onclick = () => loadStage(stage.id);
+                        navContainerMobile.appendChild(btnM);
+                    }
+
+                    if(navContainerDesktop) {
+                        const btnD = document.createElement('div'); btnD.className = 'nav-item'; btnD.innerHTML = html;
+                        btnD.onclick = () => loadStage(stage.id);
+                        navContainerDesktop.appendChild(btnD);
+                    }
+                });
+            } catch (e) { console.error('Error renderNav:', e); }
+        }
+
+        function loadStage(stageId) {
+            try {
+                if(DOM.metricsOutput) DOM.metricsOutput.innerHTML = '';
+                if(DOM.resultsContainer) DOM.resultsContainer.classList.add('hidden');
+                if(DOM.psychResult) DOM.psychResult.classList.add('hidden');
+                
+                state.currentStage = stagesConfig.find(s => s.id === stageId);
+                
+                document.querySelectorAll('.nav-item').forEach((btn, idx) => {
+                    const isActive = stagesConfig[idx % stagesConfig.length].id === stageId;
+                    btn.classList.toggle('active', isActive);
+                    if(isActive && window.innerWidth < 1024) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                });
+
+                if(DOM.welcomeScreen) DOM.welcomeScreen.classList.add('hidden'); 
+                if(DOM.stageContent) DOM.stageContent.classList.remove('hidden');
+                if(DOM.quizContainer) DOM.quizContainer.classList.remove('hidden');
+
+                if(DOM.stageTitle) DOM.stageTitle.innerText = state.currentStage.title; 
+                if(DOM.stageIcon) DOM.stageIcon.innerHTML = state.currentStage.icon;
+                
+                if(DOM.formInputs) {
+                    DOM.formInputs.innerHTML = '';
+                    state.currentStage.inputs.forEach((inp, i) => {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = `input-wrapper ${inp.fullWidth ? 'full-width' : ''}`;
+                        wrapper.style.animationDelay = `${i * 0.05}s`; // Faster staggered animation
+                        
+                        const savedVal = localStorage.getItem(`${stageId}_${inp.id}`) || inp.default || '';
+                        
+                        let inputEl = '';
+                        const iconHtml = inp.icon ? `<i class="ph-duotone ${inp.icon} input-icon"></i>` : '';
+                        
+                        if(inp.type === 'select') {
+                            inputEl = `<div class="floating-input"><select id="${inp.id}" required>`;
+                            inp.options.forEach(opt => { inputEl += `<option value="${opt}" ${savedVal===opt?'selected':''}>${opt}</option>`; });
+                            inputEl += `</select><label for="${inp.id}">${inp.label}</label>${iconHtml}</div>`;
+                        } else {
+                            inputEl = `<div class="floating-input"><input type="${inp.type}" id="${inp.id}" step="${inp.step||'any'}" value="${savedVal}" placeholder=" " required><label for="${inp.id}">${inp.label}</label>${iconHtml}</div>`;
+                        }
+
+                        wrapper.innerHTML = `
+                            ${inputEl}
+                            <div class="help-area">
+                                <span class="help-text">${inp.desc}</span>
+                                <button type="button" class="info-btn" id="btn-info-${inp.id}" onclick="toggleInfoPanel('${inp.id}')" aria-label="Info"><i class="ph-bold ph-info"></i></button>
+                            </div>
+                            <div class="info-panel-wrapper" id="info-wrapper-${inp.id}">
+                                <div class="info-panel-inner">
+                                    <div class="info-content"><i class="ph-duotone ph-lightbulb"></i> <div>${inp.tooltip}</div></div>
+                                </div>
+                            </div>
+                        `;
+                        DOM.formInputs.appendChild(wrapper);
+                    });
+                }
+
+                if(DOM.psychDesc) DOM.psychDesc.innerText = state.currentStage.psych.desc;
+                buildQuiz();
+            } catch (e) { console.error('Error loadStage:', e); }
+        }
+
+        try {
+            if(DOM.physicalForm) {
+                DOM.physicalForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    try {
+                        const data = {};
+                        state.currentStage.inputs.forEach(inp => {
+                            const el = document.getElementById(inp.id);
+                            data[inp.id] = el.value; localStorage.setItem(`${state.currentStage.id}_${inp.id}`, el.value);
+                        });
+
+                        const metrics = state.currentStage.calculateFnc(data);
+                        if(DOM.metricsOutput) {
+                            DOM.metricsOutput.innerHTML = '';
+                            metrics.forEach((m, i) => {
+                                const boxClass = m.type ? `metric-card ${m.type}` : 'metric-card';
+                                DOM.metricsOutput.innerHTML += `
+                                    <div class="${boxClass}" style="animation-delay: ${i * 0.1}s">
+                                        <div class="metric-header">
+                                            <span class="metric-label">${m.title}</span>
+                                            <button type="button" class="info-btn" id="btn-info-${m.id}" onclick="toggleInfoPanel('${m.id}')" style="width:26px; height:26px; font-size:0.9rem;"><i class="ph-bold ph-info"></i></button>
+                                        </div>
+                                        <div class="metric-value">${m.value}</div>
+                                        <div class="help-text" style="font-size:0.85rem; margin-top:6px;">${m.desc}</div>
+                                        
+                                        <div class="info-panel-wrapper" id="info-wrapper-${m.id}">
+                                            <div class="info-panel-inner" style="padding-top: 12px;">
+                                                <div class="info-content"><i class="ph-duotone ph-lightbulb"></i> <div>${m.tooltip}</div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                        }
+                        
+                        if(DOM.resultsContainer) {
+                            DOM.resultsContainer.classList.remove('hidden');
+                            if(window.innerWidth < 1024) DOM.resultsContainer.scrollIntoView({behavior: 'smooth', block: 'start'});
+                        }
+                        showToast('Analisis Klinis Selesai');
+                    } catch(err) { console.error('Error physical form submit:', err); }
+                });
+            }
+        } catch(e) { console.error('Error binding physical form:', e); }
+
+        function buildQuiz() {
+            try {
+                const psych = state.currentStage.psych;
+                state.answersPsych = new Array(psych.questions.length).fill(null); state.currentQuizIndex = 0;
+                if(DOM.quizQuestions) DOM.quizQuestions.innerHTML = '';
+                
+                psych.questions.forEach((q, qIndex) => {
+                    const div = document.createElement('div'); div.className = `quiz-question ${qIndex === 0 ? 'active' : ''}`;
+                    let html = `<h3>${qIndex + 1}. ${q}</h3><div class="quiz-options">`;
+                    psych.options.forEach((opt, oIndex) => {
+                        html += `<label class="quiz-option" id="opt-${qIndex}-${oIndex}">
+                                    <input type="radio" name="q_${qIndex}" value="${opt.score}" onchange="selectAnswer(${qIndex}, ${oIndex}, ${opt.score})">
+                                    <i class="ph-duotone ph-circle"></i> <span>${opt.text}</span>
+                                </label>`;
+                    });
+                    html += `</div>`; div.innerHTML = html; 
+                    if(DOM.quizQuestions) DOM.quizQuestions.appendChild(div);
+                });
+                updateQuizUI();
+            } catch (e) { console.error('Error buildQuiz:', e); }
+        }
+
+        window.selectAnswer = function(qIndex, oIndex, score) {
+            try {
+                state.answersPsych[qIndex] = score;
+                document.querySelectorAll(`input[name="q_${qIndex}"]`).forEach((input, idx) => { 
+                    const el = document.getElementById(`opt-${qIndex}-${idx}`);
+                    const icon = el.querySelector('i');
+                    if(idx === oIndex) {
+                        el.classList.add('selected');
+                        icon.className = 'ph-fill ph-check-circle';
+                    } else {
+                        el.classList.remove('selected');
+                        icon.className = 'ph-duotone ph-circle';
+                    }
+                });
+            } catch (e) { console.error('Error selectAnswer:', e); }
+        };
+
+        function updateQuizUI() {
+            try {
+                const total = state.currentStage.psych.questions.length;
+                document.querySelectorAll('.quiz-question').forEach((el, idx) => { el.classList.toggle('active', idx === state.currentQuizIndex); });
+                if(DOM.btnPrev) DOM.btnPrev.classList.toggle('hidden', state.currentQuizIndex === 0);
+                
+                if (state.currentQuizIndex === total - 1) {
+                    if(DOM.btnNext) DOM.btnNext.classList.add('hidden'); 
+                    if(DOM.btnSubmit) DOM.btnSubmit.classList.remove('hidden');
+                    if(DOM.btnPrev) DOM.btnPrev.style.gridColumn = "span 1"; 
+                    if(DOM.btnSubmit) DOM.btnSubmit.style.gridColumn = "span 1";
+                } else {
+                    if(DOM.btnNext) DOM.btnNext.classList.remove('hidden'); 
+                    if(DOM.btnSubmit) DOM.btnSubmit.classList.add('hidden');
+                    if(state.currentQuizIndex === 0) {
+                        if(DOM.btnNext) DOM.btnNext.style.gridColumn = "span 2";
+                    } else { 
+                        if(DOM.btnPrev) DOM.btnPrev.style.gridColumn = "span 1"; 
+                        if(DOM.btnNext) DOM.btnNext.style.gridColumn = "span 1"; 
+                    }
+                }
+                if(DOM.quizProgress) DOM.quizProgress.style.width = `${((state.currentQuizIndex + 1) / total) * 100}%`;
+            } catch (e) { console.error('Error updateQuizUI:', e); }
+        }
+
+        try {
+            if(DOM.btnNext) {
+                DOM.btnNext.addEventListener('click', () => { 
+                    if (state.answersPsych[state.currentQuizIndex] === null) return showToast("Pilih jawaban dahulu."); 
+                    state.currentQuizIndex++; updateQuizUI(); 
+                });
+            }
+            if(DOM.btnPrev) {
+                DOM.btnPrev.addEventListener('click', () => { state.currentQuizIndex--; updateQuizUI(); });
+            }
+            
+            if(DOM.quizForm) {
+                DOM.quizForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    try {
+                        if (state.answersPsych[state.currentQuizIndex] === null) return showToast("Pilih jawaban terakhir.");
+                        
+                        const totalScore = state.answersPsych.reduce((a, b) => a + b, 0); const maxScore = state.answersPsych.length * 3; 
+                        const resultObj = state.currentStage.psych.evaluate(totalScore);
+                        
+                        if(DOM.psychScore) DOM.psychScore.innerHTML = `${totalScore} <span style="font-size:1.2rem; color:var(--text-muted);">/ ${maxScore}</span>`;
+                        if(DOM.psychInterpretation) DOM.psychInterpretation.innerText = resultObj.text;
+                        if(DOM.psychBox) DOM.psychBox.className = `metric-card ${resultObj.type}`;
+                        
+                        if(DOM.quizContainer) DOM.quizContainer.classList.add('hidden'); 
+                        if(DOM.psychResult) DOM.psychResult.classList.remove('hidden');
+                        if(window.innerWidth < 1024 && DOM.psychResult) DOM.psychResult.scrollIntoView({behavior: 'smooth', block: 'start'});
+                        showToast('Asesmen Psikologi Selesai');
+                    } catch (err) { console.error('Error quiz form submit:', err); }
+                });
+            }
+
+            if(DOM.btnRetake) {
+                DOM.btnRetake.addEventListener('click', () => { 
+                    try {
+                        if(DOM.psychResult) DOM.psychResult.classList.add('hidden'); 
+                        if(DOM.quizContainer) DOM.quizContainer.classList.remove('hidden'); 
+                        buildQuiz(); 
+                    } catch(err) { console.error('Error btnRetake click:', err); }
+                });
+            }
+        } catch(e) { console.error('Error binding quiz buttons:', e); }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            try {
+                renderNav();
+                const manifest = {
+                    "name": "Bidan Super App", "short_name": "Bidan Super App", "start_url": ".", "display": "standalone", "background_color": "#F8FAFC", "theme_color": "#F43F5E",
+                    "icons": [{"src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192'><rect width='192' height='192' rx='40' fill='%23F43F5E'/><text x='50%' y='50%' font-size='80' text-anchor='middle' dominant-baseline='central'>🤍</text></svg>", "sizes": "192x192", "type": "image/svg+xml"}]
+                };
+                document.getElementById('manifest-link').href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/json'}));
+            } catch (e) { console.error('Error DOMContentLoaded:', e); }
+        });
+    </script>
+</body>
+</html>
