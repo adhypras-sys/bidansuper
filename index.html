@@ -13,11 +13,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Phosphor Icons (Modern & Consistent Iconography) -->
+    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
-        /* === MODERN DESIGN TOKENS & GLASSMORPHISM === */
+        /* === MODERN DESIGN TOKENS === */
         :root {
             --font-main: 'Plus Jakarta Sans', sans-serif;
             
@@ -35,7 +35,11 @@
             --bg-app: #F8FAFC;
             --text-main: #0F172A;
             --text-muted: #64748B;
-            --input-bg: rgba(255, 255, 255, 0.9);
+            
+            /* SOLID INPUT TOKENS */
+            --input-bg: #FFFFFF;
+            --input-border: #CBD5E1;
+            --input-border-focus: #F43F5E;
             
             /* Status Colors */
             --danger: #EF4444;
@@ -45,35 +49,36 @@
             --radius-md: 16px;
             --radius-lg: 24px;
             --radius-xl: 32px;
-            --transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); /* Faster transitions */
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
             /* Blob Background Gradient Light */
-            --bg-blob-1: #FFE4E6; /* Light Rose */
-            --bg-blob-2: #E0E7FF; /* Light Indigo */
-            --bg-blob-3: #FEF3C7; /* Light Amber */
+            --bg-blob-1: #FFE4E6;
+            --bg-blob-2: #E0E7FF;
+            --bg-blob-3: #FEF3C7;
         }
 
-        /* === DARK MODE TOKENS (Fixed Primary Color) === */
+        /* === DARK MODE TOKENS === */
         [data-theme="dark"] {
-            --primary: #F43F5E; /* Rose 500 - Dipertahankan dari mode terang */
+            --primary: #F43F5E; 
             --primary-hover: #E11D48;
             --primary-light: rgba(244, 63, 94, 0.15);
             
-            /* Glassmorphism Dark */
             --glass-bg: rgba(15, 23, 42, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             --glass-card: rgba(30, 41, 59, 0.7);
             
-            --bg-app: #020617; /* Slate 950 */
+            --bg-app: #020617; 
             --text-main: #F8FAFC;
             --text-muted: #94A3B8;
-            --input-bg: rgba(15, 23, 42, 0.8);
             
-            /* Blob Background Gradient Dark */
-            --bg-blob-1: #4C1D95; /* Deep Violet */
-            --bg-blob-2: #831843; /* Deep Pink */
-            --bg-blob-3: #0F766E; /* Deep Teal */
+            --input-bg: #1E293B; 
+            --input-border: #475569; 
+            --input-border-focus: #F43F5E;
+            
+            --bg-blob-1: #4C1D95; 
+            --bg-blob-2: #831843; 
+            --bg-blob-3: #0F766E; 
         }
 
         /* === GLOBAL RESET === */
@@ -90,7 +95,7 @@
             position: relative;
         }
 
-        /* === ANIMATED MESH/BLOB BACKGROUND === */
+        /* === ANIMATED MESH BACKGROUND === */
         .bg-mesh {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden;
             background: var(--bg-app); transition: background 0.2s ease;
@@ -112,23 +117,22 @@
         /* === LAYOUT ARCHITECTURE === */
         .app-container { display: flex; flex-direction: column; min-height: 100vh; width: 100%; position: relative; z-index: 1; }
 
-        /* HEADER GLASSMORPHISM */
+        /* HEADER */
         .app-header {
             background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
             padding: 16px 20px; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--glass-border);
             display: flex; justify-content: space-between; align-items: center; width: 100%;
-            transition: var(--transition);
         }
 
         .brand { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
         .brand i { color: var(--primary); font-size: 1.6rem; }
 
-        .theme-btn {
+        .action-btn {
             background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); border-radius: 50%;
             width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer;
             transition: var(--transition); font-size: 1.2rem; box-shadow: var(--glass-shadow);
         }
-        .theme-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: rotate(15deg); }
+        .action-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.05); }
 
         /* NAVIGATION SCROLLER */
         .nav-scroller {
@@ -144,39 +148,44 @@
             box-shadow: var(--glass-shadow);
         }
         .nav-item i { font-size: 1.3rem; }
-        .nav-item:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); color: var(--primary); }
+        .nav-item:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.05); color: var(--primary); }
         .nav-item.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 25px var(--primary-light); }
 
         /* MAIN CONTENT */
         .main-content { padding: 32px 20px 120px 20px; flex: 1; max-width: 1400px; margin: 0 auto; width: 100%; }
         .split-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start; width: 100%; }
 
-        /* GLASS CARD */
+        /* CARDS */
         .card { 
             background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border); 
             animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; width: 100%; position: relative; overflow: hidden;
         }
         
-        /* Ornamental glow inside card */
         .card::before {
             content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px;
             background: var(--primary-light); filter: blur(50px); border-radius: 50%; z-index: -1;
         }
 
-        .card-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
+        .card-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); position: relative;}
         .card-header .icon-box { 
             width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary-light), transparent); 
             border: 1px solid var(--primary-light); border-radius: 18px; display: flex; align-items: center; justify-content: center; 
-            font-size: 1.8rem; color: var(--primary);
+            font-size: 1.8rem; color: var(--primary); flex-shrink: 0;
         }
         .card-header h2 { font-size: 1.6rem; margin: 0; line-height: 1.2; letter-spacing: -0.04em; }
+        
+        .reset-form-btn {
+            position: absolute; right: 0; top: 0; background: var(--glass-bg); color: var(--text-muted); border: 1px solid var(--glass-border);
+            border-radius: 12px; padding: 8px 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; gap: 6px;
+        }
+        .reset-form-btn:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 
-        /* FLOATING INPUTS MODERN */
+        /* FLOATING INPUTS (BULLETPROOF UX) */
         .form-grid { display: grid; grid-template-columns: 1fr; gap: 24px; width: 100%; }
         .input-wrapper { display: flex; flex-direction: column; gap: 8px; width: 100%; animation: fadeZoomIn 0.25s ease forwards; opacity: 0; transform: scale(0.98); }
         
-        /* Staggered animation delays for inputs (faster) */
         .input-wrapper:nth-child(1) { animation-delay: 0.05s; }
         .input-wrapper:nth-child(2) { animation-delay: 0.1s; }
         .input-wrapper:nth-child(3) { animation-delay: 0.15s; }
@@ -185,33 +194,60 @@
         .input-wrapper:nth-child(6) { animation-delay: 0.3s; }
         .input-wrapper:nth-child(7) { animation-delay: 0.35s; }
 
-        .floating-input { position: relative; background: var(--input-bg); border-radius: 16px; border: 1px solid var(--glass-border); transition: var(--transition); width: 100%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-        .floating-input:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light), inset 0 2px 4px rgba(0,0,0,0.02); background: var(--glass-card); }
+        .floating-input { 
+            position: relative; background: var(--input-bg); border-radius: 16px; 
+            border: 1.5px solid var(--input-border); transition: var(--transition); 
+            width: 100%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); 
+        }
+        .floating-input:focus-within { 
+            border-color: var(--input-border-focus); 
+            box-shadow: 0 0 0 4px var(--primary-light), inset 0 2px 4px rgba(0,0,0,0.02); 
+        }
         
         .floating-input input, .floating-input select { 
-            width: 100%; padding: 28px 48px 12px 16px; /* 48px right padding for icon */
+            width: 100%; height: 64px; padding: 26px 48px 10px 16px; 
             background: transparent; border: none; outline: none; 
-            font-size: 1.05rem; color: var(--text-main); font-family: var(--font-main); font-weight: 600; appearance: none; border-radius: 16px; 
+            font-size: 1.05rem; color: var(--text-main); font-family: var(--font-main); font-weight: 600; 
+            appearance: none; border-radius: 16px; text-align: left; 
         }
-        .floating-input label { position: absolute; left: 16px; top: 20px; font-size: 1rem; color: var(--text-muted); transition: var(--transition); pointer-events: none; font-weight: 500; }
         
-        /* Stylized input icon */
+        .floating-input label { 
+            position: absolute; left: 16px; top: 20px; font-size: 1rem; color: var(--text-muted); 
+            transition: var(--transition); pointer-events: none; font-weight: 500; 
+        }
+        
         .input-icon {
-            position: absolute; right: 16px; top: 22px; font-size: 1.4rem; color: var(--text-muted); pointer-events: none; transition: var(--transition);
+            position: absolute; right: 16px; top: 20px; font-size: 1.4rem; color: var(--text-muted); pointer-events: none; transition: var(--transition);
         }
         .floating-input:focus-within .input-icon { color: var(--primary); transform: scale(1.1); }
 
-        .floating-input input:focus ~ label, .floating-input input:not(:placeholder-shown) ~ label, 
-        .floating-input select:focus ~ label, .floating-input select:valid ~ label,
-        .floating-input input[type="date"] ~ label, .floating-input input[type="time"] ~ label { 
+        /* Force left alignment on date/time & hide native icons */
+        .floating-input input[type="date"]::-webkit-datetime-edit,
+        .floating-input input[type="time"]::-webkit-datetime-edit { text-align: left; }
+        .floating-input input[type="date"]::-webkit-calendar-picker-indicator,
+        .floating-input input[type="time"]::-webkit-calendar-picker-indicator {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;
+        }
+
+        /* Bulletproof Floating Label Logic using class .filled */
+        .floating-input input:focus ~ label, 
+        .floating-input input.filled ~ label, 
+        .floating-input select:focus ~ label, 
+        .floating-input select.filled ~ label { 
             top: 8px; font-size: 0.75rem; color: var(--primary); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
         }
+
+        /* Hide text until filled or focused for date/time */
+        .floating-input input[type="date"]:not(:focus):not(.filled),
+        .floating-input input[type="time"]:not(:focus):not(.filled) { color: transparent; }
 
         /* HELP PANEL */
         .help-area { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px; width: 100%; }
         .help-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; flex: 1; }
         .info-btn { 
-            background: var(--glass-bg); color: var(--text-main); border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; border: 1px solid var(--glass-border); transition: var(--transition); cursor: pointer;
+            background: var(--glass-bg); color: var(--text-main); border-radius: 50%; width: 32px; height: 32px; 
+            display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; 
+            border: 1px solid var(--glass-border); transition: var(--transition); cursor: pointer; flex-shrink: 0;
         }
         .info-btn:hover, .info-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px var(--primary-light); transform: scale(1.1); }
         
@@ -240,7 +276,6 @@
             display: flex; flex-direction: column; gap: 8px; transition: var(--transition); width: 100%; position: relative; overflow: hidden;
             box-shadow: var(--glass-shadow); animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0;
         }
-        /* Color coding line */
         .metric-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--primary); transition: var(--transition); }
         .metric-card.danger::before { background: var(--danger); }
         .metric-card.warning::before { background: var(--warning); }
@@ -251,14 +286,14 @@
         .metric-label { font-size: 0.85rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .metric-value { font-size: 1.3rem; font-weight: 800; color: var(--text-main); line-height: 1.4; display: flex; align-items: center; gap: 8px; }
 
-        /* PSYCH QUIZ MODERN */
+        /* PSYCH QUIZ */
         .quiz-question { display: none; animation: fadeInScale 0.2s ease; width: 100%; }
         .quiz-question.active { display: block; }
         .quiz-question h3 { font-size: 1.2rem; margin-bottom: 24px; line-height: 1.5; color: var(--text-main); }
         
         .quiz-options { display: flex; flex-direction: column; gap: 12px; width: 100%; }
         .quiz-option { 
-            padding: 18px 24px; background: var(--input-bg); border: 2px solid var(--glass-border); border-radius: 16px; 
+            padding: 18px 24px; background: var(--input-bg); border: 2px solid var(--input-border); border-radius: 16px; 
             cursor: pointer; font-weight: 600; color: var(--text-main); transition: var(--transition); 
             display: flex; align-items: center; gap: 12px; width: 100%;
         }
@@ -288,7 +323,7 @@
         @keyframes fadeZoomIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
         
-        /* === DESKTOP & LARGE SCREENS SYMMETRY FIXES === */
+        /* DESKTOP SYMMETRY */
         @media (min-width: 1024px) {
             .app-container { flex-direction: row; align-items: flex-start; max-width: 1600px; margin: 0 auto; padding: 40px 32px; gap: 40px; }
             .app-header { display: none; }
@@ -329,16 +364,21 @@
     <header class="app-header">
         <div class="brand"><i class="ph-fill ph-heartbeat"></i> Bidan Super App</div>
         <div style="display: flex; align-items: center; gap: 12px;">
-            <button id="theme-toggle-mobile" class="theme-btn" aria-label="Toggle Theme"><i class="ph-bold ph-moon"></i></button>
+            <button class="action-btn reset-global-btn" aria-label="Reset Semua"><i class="ph-bold ph-broom"></i></button>
+            <button id="theme-toggle-mobile" class="action-btn" aria-label="Toggle Theme"><i class="ph-bold ph-moon"></i></button>
         </div>
     </header>
 
     <div class="app-container">
         
+        <!-- Desktop Sidebar -->
         <aside class="sidebar hidden-mobile" style="display:none;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div class="sidebar-brand"><i class="ph-fill ph-heartbeat"></i> Bidan Super App</div>
-                <button id="theme-toggle-desktop" class="theme-btn" aria-label="Toggle Theme"><i class="ph-bold ph-moon"></i></button>
+                <div style="display: flex; gap:8px;">
+                    <button class="action-btn reset-global-btn" aria-label="Reset Formulir Pasien"><i class="ph-bold ph-broom"></i></button>
+                    <button id="theme-toggle-desktop" class="action-btn" aria-label="Toggle Theme"><i class="ph-bold ph-moon"></i></button>
+                </div>
             </div>
             <div class="sidebar-desc">Platform skrining klinis obstetri & psikometri mandiri. Dirancang sesuai pedoman ACOG & WHO.</div>
             <nav class="nav-scroller" id="nav-container-desktop"></nav>
@@ -367,6 +407,7 @@
                             <h2 id="stage-title">Judul Fase</h2>
                             <p style="font-size: 0.95rem; margin-top:4px;">Analisis Fisiologis & Input Klinis</p>
                         </div>
+                        <button type="button" class="reset-form-btn" id="btn-reset-form" title="Bersihkan Form"><i class="ph-bold ph-arrows-counter-clockwise"></i> Reset</button>
                     </div>
                     
                     <form id="physical-form">
@@ -459,14 +500,15 @@
             btnRetake: document.getElementById('btn-retake-quiz'),
             quizContainer: document.getElementById('quiz-container'),
             toast: document.getElementById('toast'),
-            toastMsg: document.getElementById('toast-msg')
+            toastMsg: document.getElementById('toast-msg'),
+            btnResetForm: document.getElementById('btn-reset-form')
         };
         
         const navContainerMobile = document.getElementById('nav-container-mobile');
         const navContainerDesktop = document.getElementById('nav-container-desktop');
 
         /**
-         * THEME MANAGEMENT LOGIC
+         * UTILITY FUNCTIONS & THEME MANAGEMENT
          */
         function updateThemeIcons() {
             try {
@@ -492,6 +534,24 @@
         try {
             document.getElementById('theme-toggle-mobile').addEventListener('click', toggleTheme);
             document.getElementById('theme-toggle-desktop').addEventListener('click', toggleTheme);
+            
+            // Global Reset Event Listeners
+            document.querySelectorAll('.reset-global-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if(state.currentStage) loadStage(state.currentStage.id);
+                    showToast('Sesi Pasien Direset');
+                });
+            });
+
+            if(DOM.btnResetForm) {
+                DOM.btnResetForm.addEventListener('click', () => {
+                    if(DOM.physicalForm) DOM.physicalForm.reset();
+                    document.querySelectorAll('.floating-input input, .floating-input select').forEach(el => el.classList.remove('filled'));
+                    if(DOM.resultsContainer) DOM.resultsContainer.classList.add('hidden');
+                    showToast('Formulir Dibersihkan');
+                });
+            }
+
             updateThemeIcons();
 
             if(window.innerWidth >= 1024) {
@@ -501,7 +561,7 @@
             } else {
                 if(navContainerDesktop) navContainerDesktop.style.display = 'none';
             }
-        } catch(e) { console.error('Error binding theme listeners:', e); }
+        } catch(e) { console.error('Error binding global listeners:', e); }
 
         function showToast(msg) { 
             try {
@@ -537,7 +597,7 @@
         };
 
         /**
-         * CORE DATA ARCHITECTURE & ALGORITHMS
+         * CORE DATA ARCHITECTURE & ALGORITHMS (ENHANCED MEDICAL LOGIC)
          */
         const optFrequency = [
             { text: "Tidak pernah", score: 0 }, { text: "Beberapa hari", score: 1 },
@@ -554,12 +614,10 @@
 
         const stagesConfig = [
             {
-                // MENGGUNAKAN IKON ph-heart KARENA LEBIH AMAN DAN TERSEDIA DI SEMUA VERSI
                 id: 'pranikah', title: 'Pra Nikah', icon: '<i class="ph-duotone ph-heart"></i>',
                 inputs: [
                     { id: 'bb', label: 'Berat Badan (kg)', type: 'number', step: '0.1', icon: 'ph-scales', desc: 'Massa tubuh saat ini.', tooltip: 'Data berat badan digunakan untuk mengkalkulasi Indeks Massa Tubuh (BMI).' },
                     { id: 'tb', label: 'Tinggi Badan (cm)', type: 'number', icon: 'ph-ruler', desc: 'Tinggi tubuh saat ini.', tooltip: 'Digunakan sebagai pembagi dalam rumus BMI. Proporsi ideal mencegah komplikasi.' },
-                    // MENGGANTI ph-person MENJADI ph-user
                     { id: 'lila', label: 'Lingkar Lengan (cm)', type: 'number', step: '0.1', icon: 'ph-user', desc: 'Diukur di pertengahan lengan kiri.', tooltip: 'Standar WHO > 23.5 cm. Jika kurang, berisiko Kurang Energi Kronis (KEK).' },
                     { id: 'td_sistolik', label: 'Tensi Sistolik (mmHg)', type: 'number', icon: 'ph-activity', desc: 'Angka atas tekanan darah.', tooltip: 'Penting untuk mendeteksi risiko hipertensi dini sebelum merencanakan kehamilan.' },
                     { id: 'td_diastolik', label: 'Tensi Diastolik (mmHg)', type: 'number', icon: 'ph-activity', desc: 'Angka bawah tekanan darah.', tooltip: 'Tekanan darah normal yang ideal adalah di bawah 120/80 mmHg.' },
@@ -568,14 +626,23 @@
                 calculateFnc: (data) => {
                     try {
                         let results = [];
-                        const bb = parseFloat(data.bb); const tbM = parseFloat(data.tb) / 100;
-                        const lila = parseFloat(data.lila); const tidur = parseFloat(data.jam_tidur);
-                        const sis = parseFloat(data.td_sistolik); const dia = parseFloat(data.td_diastolik);
+                        const bb = parseFloat(data.bb); 
+                        let tbCm = parseFloat(data.tb);
+                        const lila = parseFloat(data.lila); 
+                        const tidur = parseFloat(data.jam_tidur);
+                        const sis = parseFloat(data.td_sistolik); 
+                        const dia = parseFloat(data.td_diastolik);
                         
-                        if(!isNaN(bb) && !isNaN(tbM) && tbM > 0) {
-                            const bmi = (bb / (tbM * tbM)).toFixed(1);
-                            let bmiStatus = bmi < 18.5 ? "Kurus" : bmi < 25 ? "Normal" : bmi < 30 ? "Overweight" : "Obese";
-                            results.push({ id: 'res_bmi', title: 'Body Mass Index', value: `<i class="ph-duotone ph-scales"></i> ${bmi} - ${bmiStatus}`, type: bmi < 18.5 || bmi >= 30 ? "warning" : "success", desc: 'Rasio berat dan tinggi badan.', tooltip: 'Wanita dengan BMI Normal (18.5-24.9) memiliki keseimbangan hormon estrogen terbaik.' });
+                        // Sanity check for height input (preventing astronomical BMI if entered in meters)
+                        if(!isNaN(tbCm) && tbCm > 0) {
+                            if(tbCm < 3) tbCm = tbCm * 100; // Assume user typed 1.6 instead of 160
+                            const tbM = tbCm / 100;
+                            
+                            if(!isNaN(bb) && bb > 10 && bb < 300) {
+                                const bmi = (bb / (tbM * tbM)).toFixed(1);
+                                let bmiStatus = bmi < 18.5 ? "Kurus" : bmi < 25 ? "Normal" : bmi < 30 ? "Overweight" : "Obese";
+                                results.push({ id: 'res_bmi', title: 'Body Mass Index', value: `<i class="ph-duotone ph-scales"></i> ${bmi} - ${bmiStatus}`, type: bmi < 18.5 || bmi >= 30 ? "warning" : "success", desc: 'Rasio berat dan tinggi badan.', tooltip: 'Wanita dengan BMI Normal (18.5-24.9) memiliki keseimbangan hormon estrogen terbaik.' });
+                            }
                         }
                         if(!isNaN(lila)) {
                             results.push({ id: 'res_lila', title: 'Skrining KEK (LILA)', value: lila < 23.5 ? `<i class="ph-duotone ph-warning"></i> Risiko KEK` : `<i class="ph-duotone ph-check-circle"></i> Normal`, type: lila < 23.5 ? "danger" : "success", desc: 'Status cadangan gizi.', tooltip: 'Intervensi gizi wajib dilakukan sebelum hamil jika LILA kurang dari 23.5 cm.' });
@@ -590,7 +657,7 @@
                         }
                         return results;
                     } catch (e) {
-                        console.error('Error pranikah calculateFnc:', e);
+                        console.error('Error pranikah calculate:', e);
                         return [];
                     }
                 },
@@ -609,8 +676,7 @@
                             if(score <= 9) return { text: "Tingkat stres ringan-sedang. Bicarakan kekhawatiran Anda secara terbuka dengan pasangan.", type:"warning" };
                             return { text: "Distres pra-nikah tinggi. Berdampak negatif pada kesehatan fisik. Pertimbangkan konseling pranikah.", type:"danger" };
                         } catch(e) {
-                            console.error('Error pranikah psych evaluate:', e);
-                            return {text: "Error", type:""};
+                            return {text: "Error internal dalam sistem penilaian.", type:"danger"};
                         }
                     }
                 }
@@ -619,7 +685,7 @@
                 id: 'persiapan_hamil', title: 'Program Hamil', icon: '<i class="ph-duotone ph-plant"></i>',
                 inputs: [
                     { id: 'hpht', label: 'Hari Pertama Haid (HPHT)', type: 'date', fullWidth: true, icon: 'ph-calendar-blank', desc: 'Haid terakhir.', tooltip: 'Pastikan yang dicatat adalah HARI PERTAMA keluarnya darah haid.' },
-                    { id: 'siklus', label: 'Siklus Haid (hari)', type: 'number', default: '28', icon: 'ph-arrows-clockwise', desc: 'Jarak antar haid.', tooltip: 'Rata-rata populasi adalah 28 hari. Siklus sangat tidak teratur bisa menandakan PCOS.' },
+                    { id: 'siklus', label: 'Siklus Haid (hari)', type: 'number', icon: 'ph-arrows-clockwise', desc: 'Jarak antar haid.', tooltip: 'Rata-rata populasi adalah 28 hari. Siklus sangat tidak teratur bisa menandakan PCOS.' },
                     { id: 'suhu_basal', label: 'Suhu Basal Pagi (°C)', type: 'number', step: '0.1', icon: 'ph-thermometer', desc: 'Suhu bangun tidur.', tooltip: 'Kenaikan suhu basal sekitar 0.3-0.5°C menandakan sel telur SUDAH dilepaskan.' },
                     { id: 'lendir_serviks', label: 'Lendir Serviks', type: 'select', options: ['Kering / Tidak ada', 'Lengket / Putih Susu', 'Bening, Licin & Melar'], fullWidth: true, icon: 'ph-drop', desc: 'Metode Billings.', tooltip: 'Lendir melar (putih telur mentah) membentuk jalan tol bagi sperma.' }
                 ],
@@ -641,7 +707,7 @@
                         }
                         return results;
                     } catch (e) {
-                        console.error('Error persiapan_hamil calculateFnc:', e);
+                        console.error('Error persiapan_hamil calculate:', e);
                         return [];
                     }
                 },
@@ -660,7 +726,6 @@
                             if(score <= 9) return {text: "Stres promil ringan. Cobalah membatasi media sosial dan ubah rutinitas bersama pasangan.", type: "warning"};
                             return {text: "Stres Konsepsi Tinggi. Hormon stres (Kortisol) dapat menunda pembuahan. Sangat disarankan relaksasi.", type: "danger"};
                         } catch(e) {
-                            console.error('Error persiapan_hamil psych evaluate:', e);
                             return {text: "Error", type:""};
                         }
                     }
@@ -672,8 +737,8 @@
                     { id: 'hpht_hamil', label: 'HPHT', type: 'date', fullWidth:true, icon: 'ph-calendar-blank', desc: 'Tanggal haid terakhir.', tooltip: 'Digunakan untuk kalkulasi Rumus Naegele.' },
                     { id: 'tfu', label: 'Tinggi Fundus (cm)', type: 'number', icon: 'ph-ruler', desc: 'Puncak rahim.', tooltip: 'Diukur untuk mengetahui pertumbuhan anatomis janin.' },
                     { id: 'kepala_masuk', label: 'Kepala masuk panggul?', type: 'select', options: ['Belum Masuk', 'Sudah Masuk'], icon: 'ph-baby', desc: 'Posisi janin.', tooltip: 'Mengurangi perhitungan taksiran berat di dinding perut luar.' },
-                    { id: 'td_sis_hamil', label: 'Sistolik Ibu', type: 'number', icon: 'ph-activity', desc: 'Tensi darah ibu.', tooltip: 'Pemantauan tekanan darah di trimester 2/3 wajib untuk skrining Preeklamsia.' },
-                    { id: 'td_dia_hamil', label: 'Diastolik Ibu', type: 'number', icon: 'ph-activity', desc: 'Tensi darah ibu.', tooltip: 'Batas waspada adalah jika tensi melebihi 140/90 mmHg.' },
+                    { id: 'td_sis_hamil', label: 'Sistolik Ibu', type: 'number', icon: 'ph-heart', desc: 'Tensi darah ibu.', tooltip: 'Pemantauan tekanan darah di trimester 2/3 wajib untuk skrining Preeklamsia.' },
+                    { id: 'td_dia_hamil', label: 'Diastolik Ibu', type: 'number', icon: 'ph-heart', desc: 'Tensi darah ibu.', tooltip: 'Batas waspada adalah jika tensi melebihi 140/90 mmHg.' },
                     { id: 'kick_start', label: 'Jam mulai (Gerak Janin)', type: 'time', icon: 'ph-clock', desc: 'Metode Cardiff.', tooltip: 'Hitung saat janin aktif (misal setelah ibu makan).' },
                     { id: 'kick_end', label: 'Jam gerak ke-10', type: 'time', icon: 'ph-clock', desc: 'Waktu selesai 10x gerak.', tooltip: 'Waktu akhir kalkulasi otomatis oksigenasi janin.' }
                 ],
@@ -681,15 +746,43 @@
                     try {
                         let results = [];
                         const hphtDate = parseLocalDate(data.hpht_hamil);
+                        const today = new Date();
+                        
                         if(!isNaN(hphtDate.getTime())) {
-                            const diffDays = Math.floor(Math.abs(new Date() - hphtDate) / (1000 * 60 * 60 * 24));
-                            results.push({ id: 'res_gestasi', title: 'Usia Gestasi', value: `<i class="ph-duotone ph-hourglass-high"></i> ${Math.floor(diffDays/7)} Mgg, ${diffDays%7} Hr`, type: 'success', desc: 'Rumus absolut.', tooltip: 'Menentukan normalitas janin.' });
+                            if(hphtDate > today) {
+                                results.push({ id: 'res_err_date', title: 'Validasi Tanggal', value: `<i class="ph-duotone ph-warning"></i> Error HPHT`, type: 'danger', desc: 'HPHT di masa depan.', tooltip: 'Tanggal Haid Pertama tidak bisa di masa depan. Silakan periksa kembali.' });
+                            } else {
+                                // Usia Gestasi
+                                const diffDays = Math.floor((today - hphtDate) / (1000 * 60 * 60 * 24));
+                                // HPL (Rumus Naegele)
+                                const hplDate = new Date(hphtDate);
+                                hplDate.setDate(hplDate.getDate() + 7);
+                                hplDate.setMonth(hplDate.getMonth() - 3);
+                                hplDate.setFullYear(hplDate.getFullYear() + 1);
+                                
+                                const format = (d) => d.toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
+                                
+                                results.push({ 
+                                    id: 'res_gestasi', 
+                                    title: 'Usia & HPL', 
+                                    value: `<i class="ph-duotone ph-hourglass-high"></i> ${Math.floor(diffDays/7)} Mgg, ${diffDays%7} Hr`, 
+                                    type: 'success', 
+                                    desc: `HPL: ${format(hplDate)}`, 
+                                    tooltip: 'Gestasi berdasar rumus hitung absolut HPHT dan HPL berdasar rumus Naegele standar.' 
+                                });
+                            }
                         }
+                        
                         const tfu = parseFloat(data.tfu);
-                        if(!isNaN(tfu) && tfu > 10) {
-                            const N = data.kepala_masuk === 'Sudah Masuk' ? 11 : 12;
-                            results.push({ id: 'res_tbj', title: 'Taksiran Berat Janin', value: `<i class="ph-duotone ph-scales"></i> ${Math.max((tfu - N) * 155, 0)} gram`, type: 'success', desc: 'Prediksi klinis.', tooltip: 'Rumus Johnson-Toshach. Toleransi error 200-300g dari USG.' });
+                        if(!isNaN(tfu)) {
+                            if(tfu >= 12) {
+                                const N = data.kepala_masuk === 'Sudah Masuk' ? 11 : 12;
+                                results.push({ id: 'res_tbj', title: 'Taksiran Berat Janin', value: `<i class="ph-duotone ph-scales"></i> ${Math.max((tfu - N) * 155, 0)} gram`, type: 'success', desc: 'Prediksi klinis.', tooltip: 'Rumus Johnson-Toshach. Toleransi error 200-300g dari USG.' });
+                            } else {
+                                results.push({ id: 'res_tbj_err', title: 'Taksiran Berat Janin', value: `<i class="ph-duotone ph-info"></i> Belum Teraba`, type: 'warning', desc: 'TFU < 12 cm.', tooltip: 'Rumus Johnson-Toshach tidak valid untuk tinggi fundus di bawah 12 cm.' });
+                            }
                         }
+                        
                         const sisH = parseFloat(data.td_sis_hamil); const diaH = parseFloat(data.td_dia_hamil);
                         if(!isNaN(sisH) && !isNaN(diaH)) {
                             if(sisH >= 140 || diaH >= 90) {
@@ -698,6 +791,7 @@
                                 results.push({ id: 'res_pe', title: 'Tensi Darah', value: `<i class="ph-duotone ph-heartbeat"></i> ${sisH}/${diaH} (Normal)`, type: 'success', desc: 'Aman.', tooltip: 'Sirkulasi darah ke plasenta berjalan lancar tanpa hambatan vasokonstriksi.' });
                             }
                         }
+                        
                         if(data.kick_start && data.kick_end) {
                             const tStart = new Date(`1970-01-01T${data.kick_start}`); const tEnd = new Date(`1970-01-01T${data.kick_end}`);
                             if (!isNaN(tStart.getTime()) && !isNaN(tEnd.getTime())) {
@@ -712,7 +806,7 @@
                         }
                         return results;
                     } catch (e) {
-                        console.error('Error hamil calculateFnc:', e);
+                        console.error('Error hamil calculate:', e);
                         return [];
                     }
                 },
@@ -731,7 +825,6 @@
                             if(score <= 9) return {text: "Kecemasan antenatal ringan-sedang. Sangat disarankan mengikuti kelas Prenatal Yoga/Hypnobirthing.", type: "warning"};
                             return {text: "Risiko Depresi Prenatal Tinggi. Stres kronis dapat menembus plasenta. Segera jadwalkan konsultasi psikolog.", type: "danger"};
                         } catch(e) {
-                            console.error('Error hamil psych evaluate:', e);
                             return {text: "Error", type:""};
                         }
                     }
@@ -766,7 +859,7 @@
                         }
                         return results;
                     } catch (e) {
-                        console.error('Error melahirkan calculateFnc:', e);
+                        console.error('Error melahirkan calculate:', e);
                         return [];
                     }
                 },
@@ -785,7 +878,6 @@
                             if(score <= 9) return {text: "Kecemasan persalinan normal. Pendamping (suami) WAJIB memberi pijatan endorfin & kalimat afirmasi.", type: "warning"};
                             return {text: "Terindikasi ketakutan tinggi (Tokofobia). Adrenalin yang tinggi akan menghentikan hormon pembukaan (Oksitosin). Coba teknik relaksasi mata tertutup.", type: "danger"};
                         } catch (e) {
-                            console.error('Error melahirkan psych evaluate:', e);
                             return {text: "Error", type:""};
                         }
                     }
@@ -794,7 +886,7 @@
             {
                 id: 'menyusui', title: 'Laktasi & Nifas', icon: '<i class="ph-duotone ph-baby-carriage"></i>',
                 inputs: [
-                    { id: 'frek_bak', label: 'Pipis Bayi/Hari (x)', type: 'number', default: '6', icon: 'ph-drop', desc: 'Indikator ASI.', tooltip: 'Satu popok basah berat (3 sdm air). Ini bukti sah ASI masuk.' },
+                    { id: 'frek_bak', label: 'Pipis Bayi/Hari (x)', type: 'number', icon: 'ph-drop', desc: 'Indikator ASI.', tooltip: 'Satu popok basah berat (3 sdm air). Ini bukti sah ASI masuk.' },
                     { id: 'puting_lecet', label: 'Puting Lecet / Berdarah?', type: 'select', options: ['Tidak', 'Ya, Terasa Nyeri'], icon: 'ph-bandaids', desc: 'Kondisi Anatomi Ibu.', tooltip: 'Lecet adalah tanda 100% Pelekatan (Latch) bayi salah. Mulut bayi kurang terbuka lebar.' },
                     { id: 'lam_umur', label: 'Bayi < 6 Bulan?', type: 'select', options: ['Ya', 'Tidak'], icon: 'ph-calendar', desc: 'Syarat KB LAM ke-1.', tooltip: 'Setelah 6 bulan / MPASI, efektivitas KB hormon laktasi menurun.' },
                     { id: 'lam_asi', label: 'Menyusui Full Eksklusif?', type: 'select', options: ['Ya', 'Tidak'], icon: 'ph-check-square', desc: 'Syarat KB LAM ke-2.', tooltip: 'Tanpa tambahan sufor/air. Jeda nyusu maksimal 4 jam siang, 6 jam malam.' },
@@ -809,17 +901,17 @@
                         }
                         if(data.puting_lecet === 'Ya, Terasa Nyeri') {
                             results.push({ id:'res_lecet', title: 'Evaluasi Pelekatan Laktasi', value: `<i class="ph-duotone ph-warning-octagon"></i> Pelekatan (Latch) Salah!`, type: "danger", desc: 'Risiko Mastitis.', tooltip: 'Menyusui TIDAK BOLEH SAKIT. Masukkan seluruh area hitam payudara (areola) bagian bawah ke mulut bayi, bukan hanya putingnya.' });
-                        } else {
+                        } else if (data.puting_lecet === 'Tidak') {
                             results.push({ id:'res_lecet', title: 'Evaluasi Pelekatan Laktasi', value: `<i class="ph-duotone ph-thumbs-up"></i> Pelekatan Nyaman`, type: "success", desc: 'Lanjutkan.', tooltip: 'Pelekatan yang benar mencegah luka dan memaksimalkan pengosongan payudara.' });
                         }
                         if(data.lam_umur==='Ya' && data.lam_asi==='Ya' && data.lam_haid==='Belum Haid') {
                             results.push({ id: 'res_lam1', title: 'KB Alami (Metode LAM)', value: `<i class="ph-duotone ph-shield-check"></i> EFEKTIF (98%)`, type: "success", desc: 'Standar WHO.', tooltip: 'Hormon Prolaktin menekan ovulasi sempurna. ASI bertindak sebagai KB sekuat IUD/Pil.' });
-                        } else {
+                        } else if (data.lam_umur && data.lam_asi && data.lam_haid) {
                             results.push({ id: 'res_lam2', title: 'KB Alami (Metode LAM)', value: `<i class="ph-duotone ph-shield-warning"></i> TIDAK EFEKTIF.`, type: "danger", desc: 'Syarat gugur.', tooltip: 'Syarat WHO patah. Anda dapat ovulasi kapan saja walau belum haid. Segera pasang IUD / KB progestin.' });
                         }
                         return results;
                     } catch (e) {
-                        console.error('Error menyusui calculateFnc:', e);
+                        console.error('Error menyusui calculate:', e);
                         return [];
                     }
                 },
@@ -838,7 +930,6 @@
                             if(score <= 9) return {text: "Indikasi Baby Blues. Fluktuasi hormon wajar terjadi. Minta suami mengambil alih bayi agar ibu bisa tidur 4 jam nonstop.", type: "warning"};
                             return {text: "Tanda Postpartum Depression Berat. Ini bukan salah Anda, ini kondisi medis endokrin. WAJIB SEGERA lapor keluarga/dokter!", type: "danger"};
                         } catch (e) {
-                            console.error('Error menyusui psych evaluate:', e);
                             return {text: "Error", type:""};
                         }
                     }
@@ -872,11 +963,34 @@
             } catch (e) { console.error('Error renderNav:', e); }
         }
 
+        function bindInputListeners() {
+            try {
+                // Event listener to attach 'filled' class reliably across all browsers
+                document.querySelectorAll('.floating-input input, .floating-input select').forEach(el => {
+                    el.addEventListener('input', function() {
+                        if(this.value.trim() !== '') {
+                            this.classList.add('filled');
+                        } else {
+                            this.classList.remove('filled');
+                        }
+                    });
+                    el.addEventListener('change', function() {
+                        if(this.value.trim() !== '') {
+                            this.classList.add('filled');
+                        } else {
+                            this.classList.remove('filled');
+                        }
+                    });
+                });
+            } catch (e) { console.error('Error bindInputListeners:', e); }
+        }
+
         function loadStage(stageId) {
             try {
                 if(DOM.metricsOutput) DOM.metricsOutput.innerHTML = '';
                 if(DOM.resultsContainer) DOM.resultsContainer.classList.add('hidden');
                 if(DOM.psychResult) DOM.psychResult.classList.add('hidden');
+                if(DOM.physicalForm) DOM.physicalForm.reset();
                 
                 state.currentStage = stagesConfig.find(s => s.id === stageId);
                 
@@ -898,19 +1012,18 @@
                     state.currentStage.inputs.forEach((inp, i) => {
                         const wrapper = document.createElement('div');
                         wrapper.className = `input-wrapper ${inp.fullWidth ? 'full-width' : ''}`;
-                        wrapper.style.animationDelay = `${i * 0.05}s`; // Faster staggered animation
-                        
-                        const savedVal = localStorage.getItem(`${stageId}_${inp.id}`) || inp.default || '';
+                        wrapper.style.animationDelay = `${i * 0.05}s`;
                         
                         let inputEl = '';
                         const iconHtml = inp.icon ? `<i class="ph-duotone ${inp.icon} input-icon"></i>` : '';
                         
                         if(inp.type === 'select') {
                             inputEl = `<div class="floating-input"><select id="${inp.id}" required>`;
-                            inp.options.forEach(opt => { inputEl += `<option value="${opt}" ${savedVal===opt?'selected':''}>${opt}</option>`; });
+                            inputEl += `<option value="" disabled selected hidden></option>`;
+                            inp.options.forEach(opt => { inputEl += `<option value="${opt}">${opt}</option>`; });
                             inputEl += `</select><label for="${inp.id}">${inp.label}</label>${iconHtml}</div>`;
                         } else {
-                            inputEl = `<div class="floating-input"><input type="${inp.type}" id="${inp.id}" step="${inp.step||'any'}" value="${savedVal}" placeholder=" " required><label for="${inp.id}">${inp.label}</label>${iconHtml}</div>`;
+                            inputEl = `<div class="floating-input"><input type="${inp.type}" id="${inp.id}" step="${inp.step||'any'}" value="" placeholder=" " required><label for="${inp.id}">${inp.label}</label>${iconHtml}</div>`;
                         }
 
                         wrapper.innerHTML = `
@@ -927,6 +1040,7 @@
                         `;
                         DOM.formInputs.appendChild(wrapper);
                     });
+                    bindInputListeners();
                 }
 
                 if(DOM.psychDesc) DOM.psychDesc.innerText = state.currentStage.psych.desc;
@@ -942,7 +1056,7 @@
                         const data = {};
                         state.currentStage.inputs.forEach(inp => {
                             const el = document.getElementById(inp.id);
-                            data[inp.id] = el.value; localStorage.setItem(`${state.currentStage.id}_${inp.id}`, el.value);
+                            data[inp.id] = el.value;
                         });
 
                         const metrics = state.currentStage.calculateFnc(data);
