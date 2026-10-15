@@ -478,10 +478,9 @@
                     <span class="svg-icon" data-icon="stethoscope"></span>
                 </div>
                 <h1 style="font-size: 2.2rem; margin-bottom: 14px;">Clinical Suite 8-Fase</h1>
-                <p style="max-width: 580px; margin: 0 auto 28px auto; font-size: 1.05rem; line-height: 1.65;">
-                    Sistem skrining kesehatan reproduksi dan psikologis perempuan komprehensif dari <strong>Pra Nikah hingga KB</strong>. Seluruh angka desimal menggunakan format koma (<strong>,</strong>) dan diproses 100% lokal (Offline).
+                <p style="max-width: 580px; margin: 0 auto; font-size: 1.05rem; line-height: 1.65;">
+                    Sistem skrining kesehatan reproduksi dan psikologis perempuan komprehensif dari <strong>Pra Nikah hingga KB</strong>. Seluruh angka desimal menggunakan format koma (<strong>,</strong>) dan diproses 100% lokal (Offline). Silakan pilih fase kesehatan pada menu navigasi untuk memulai.
                 </p>
-                <div id="welcome-quick-grid" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 720px; width: 100%; margin: 0 auto;"></div>
             </div>
 
             <!-- Stage Split Content -->
@@ -640,7 +639,6 @@
         
         const DOM = {
             welcomeScreen: document.getElementById('welcome-screen'),
-            welcomeQuickGrid: document.getElementById('welcome-quick-grid'),
             stageContent: document.getElementById('stage-content'),
             stageTitle: document.getElementById('stage-title'),
             stageIcon: document.getElementById('stage-icon'),
@@ -1492,7 +1490,6 @@
         function renderNav() {
             if (DOM.navContainerMobile) DOM.navContainerMobile.innerHTML = '';
             if (DOM.navContainerDesktop) DOM.navContainerDesktop.innerHTML = '';
-            if (DOM.welcomeQuickGrid) DOM.welcomeQuickGrid.innerHTML = '';
 
             stagesConfig.forEach(stage => {
                 const html = `${getIconHtml(stage.icon)} <span>${stage.title}</span>`;
@@ -1515,15 +1512,6 @@
                     btnD.innerHTML = html;
                     btnD.onclick = () => { vibrateAction(); loadStage(stage.id); };
                     DOM.navContainerDesktop.appendChild(btnD);
-                }
-
-                if (DOM.welcomeQuickGrid) {
-                    const pill = document.createElement('button');
-                    pill.type = 'button';
-                    pill.className = 'nav-item';
-                    pill.innerHTML = html;
-                    pill.onclick = () => { vibrateAction(); loadStage(stage.id); };
-                    DOM.welcomeQuickGrid.appendChild(pill);
                 }
             });
 
